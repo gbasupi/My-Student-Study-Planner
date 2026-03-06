@@ -16,7 +16,7 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-export default function Login() {
+export default function Login({ onGoRegister }){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
@@ -62,15 +62,11 @@ export default function Login() {
 
                 <Box>
                 <Typography variant="h5" fontWeight={700}>
-                    Student Study Planner
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                    Welcome back! Please enter your details.
+                    My Student Study Planner
                 </Typography>
                 </Box>
             </Box>
         </Box>
-
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -121,7 +117,11 @@ export default function Login() {
 
             <Divider>OR</Divider>
 
-            <Button variant="outlined" sx={{ textTransform: "none" }}>
+            <Button
+              variant="outlined"
+              sx={{ textTransform: "none" }}
+              onClick={onGoRegister}
+            >
               Create an account
             </Button>
           </Box>

@@ -25,8 +25,6 @@ class ExamViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Exam.objects.filter(module__student=self.request.user)
 
-
-
 # -----------------------------
 # ASSIGNMENT VIEWSET
 # -----------------------------

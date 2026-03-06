@@ -16,7 +16,9 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-export default function Registration({ onGoLogin }) {
+
+
+export default function Registration({ onGoLogin = () => {} }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,44 +26,67 @@ export default function Registration({ onGoLogin }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
+    setSuccess("");
 
-    if (!firstName.trim()) {
-        setErr("Please enter your first name");
-        return;
-    }
+    if (!firstName.trim()) return setErr("Please enter your first name");
+    if (!lastName.trim()) return setErr("Please enter your last name");
+    if (!email.trim()) return setErr("Please enter your email");
+    if (!password.trim()) return setErr("Please enter your password");
+    if (!confirmPassword.trim()) return setErr("Please confirm your password");
+    if (password !== confirmPassword) return setErr("Passwords do not match");
 
-        if (!lastName.trim()) {
-        setErr("Please enter your last name");
-        return;
-    }
+    try {
+      setLoading(true);
+      const res = await fetch("/api/auth/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            email: email.trim(),
+            password,
+            password2: confirmPassword,
+          }),
+        });
 
-    if (!email.trim()) {
-      setErr("Please enter your email");
-      return;
-    }
+      const text = await res.text();
 
-    if (!password.trim()) {
-      setErr("Please enter your password");
-      return;
-    }
+      if (!res.ok) {
+        const msg =
+          data?.email?.[0] ||
+          data?.password?.[0] ||
+          data?.password2?.[0] ||
+          data?.first_name?.[0] ||
+          data?.last_name?.[0] ||
+          data?.detail ||
+          "Registration failed";
+        throw new Error(msg);
+      }
 
-    if (!confirmPassword.trim()) {
-      setErr("Please confirm your password");
-      return;
-    }
+      setSuccess("Account created successfully");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
 
-    if (password !== confirmPassword) {
-      setErr("Passwords do not match");
-      return;
-    }
+      setTimeout(() => {
+          onGoLogin();
+        }, 1000);
+      } catch (error) {
+        setErr(error.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setLoading(true);
-
-  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -87,10 +112,12 @@ export default function Registration({ onGoLogin }) {
           </Box>
 
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ p: 4, display: "flex", flexDirection: "column", gap: 3 }}
-          >
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ p: 4, display: "flex", flexDirection: "column", gap: 3 }}
+            >
+              {err && <Alert severity="error">{err}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             <Typography variant="h6" fontWeight={700}>
               Create account
             </Typography>
@@ -122,7 +149,7 @@ export default function Registration({ onGoLogin }) {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <PersonOutlineRoundedIcon fontSize="small" />
+                    < PersonOutlineRoundedIcon fontSize="small" />
                   </InputAdornment>
                 ),
               }}
@@ -192,7 +219,7 @@ export default function Registration({ onGoLogin }) {
                 sx={{ textTransform: "none" }}
                 onClick={onGoLogin}
                 >
-                Back to login
+                Already have an account? Log in
                 </Button>
           </Box>
         </Paper>

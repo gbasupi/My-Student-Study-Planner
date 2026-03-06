@@ -1,8 +1,10 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model 
 from .models import Module, Exam, Assignment, StudyTask
 
 ## Serializers for the core models
 
+Student = get_user_model()
 # -------------------------
 # MODULE SERIALIZER
 # -------------------------
@@ -39,3 +41,40 @@ class StudyTaskSerializer(serializers.ModelSerializer):
         model = StudyTask
         fields = ["id", "module", "title", "target_date", "duration_minutes", "is_completed"]
         read_only_fields = ["id"]
+
+# -----------------------------
+# REGISTRATION SERIALIZER
+# -----------------------------
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
+    password2 = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Student
+        fields = ["first_name", "last_name", "email", "password", "password2"]
+
+    def validate_email(self, value):
+        email = value.strip().lower()
+        if Student.objects.filter(email=email).exists():
+            raise serializers.ValidationError("An account with this email already exists.")
+        return email
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError({"password2": "Passwords do not match."})
+        return attrs
+
+    def create(self, validated_data):
+        email = validated_data["email"].strip().lower()
+        password = validated_data.pop("password")
+        validated_data.pop("password2")
+
+        user = Student.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+            first_name=validated_data.get("first_name", ""),
+            last_name=validated_data.get("last_name", ""),
+        )
+        return user

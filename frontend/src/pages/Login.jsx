@@ -1,4 +1,3 @@
-// This is the login page for the Student Study Planner application. 
 import { useState } from "react";
 import {
   Box,
@@ -16,13 +15,13 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-export default function Login({ onGoRegister }){
+export default function Login({ onGoRegister = () => {}, onLogin = () => {} }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
 
@@ -36,12 +35,37 @@ export default function Login({ onGoRegister }){
       return;
     }
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    setTimeout(() => {
+      const res = await fetch("/api/auth/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email.trim(),
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const msg =
+          data?.non_field_errors?.[0] ||
+          data?.detail ||
+          "Login failed";
+        throw new Error(msg);
+      }
+
+      localStorage.setItem("token", data.token);
+      onLogin(data);
+    } catch (error) {
+      setErr(error.message || "Something went wrong");
+    } finally {
       setLoading(false);
-      console.log("Login submitted:", email);
-    }, 800);
+    }
   };
 
   return (
@@ -58,15 +82,15 @@ export default function Login({ onGoRegister }){
         >
           <Box sx={{ p: 4, bgcolor: "#111827", color: "white" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <SchoolRoundedIcon sx={{ fontSize: 36 }} />
-
-                <Box>
+              <SchoolRoundedIcon sx={{ fontSize: 36 }} />
+              <Box>
                 <Typography variant="h5" fontWeight={700}>
-                    My Student Study Planner
+                  My Student Study Planner
                 </Typography>
-                </Box>
+              </Box>
             </Box>
-        </Box>
+          </Box>
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -118,6 +142,7 @@ export default function Login({ onGoRegister }){
             <Divider>OR</Divider>
 
             <Button
+              type="button"
               variant="outlined"
               sx={{ textTransform: "none" }}
               onClick={onGoRegister}

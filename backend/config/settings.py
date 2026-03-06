@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "core",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -48,6 +50,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# Custom user model to use email as the username field
+AUTH_USER_MODEL = "core.Student"
 
 ROOT_URLCONF = "config.urls"
 

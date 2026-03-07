@@ -115,7 +115,7 @@ const displayName =
             />
 
             <Typography
-              variant="h6"
+              variant="h7"
               sx={{
                 fontWeight: 800,
                 letterSpacing: -0.3,
@@ -123,7 +123,7 @@ const displayName =
                 fontSize: { xs: 20, md: 22 },
               }}
             >
-              Student Study Planner
+              My Student Study Planner
             </Typography>
           </Stack>
 

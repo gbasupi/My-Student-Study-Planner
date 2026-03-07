@@ -23,6 +23,10 @@ export default function TableView({
   buttonLabel,
   columns,
   rows,
+  onAdd,
+  onView,
+  onEdit,
+  onDelete,
 }) {
   return (
     <Box className="views-content">
@@ -42,6 +46,7 @@ export default function TableView({
             variant="contained"
             startIcon={<AddRoundedIcon />}
             className="view-action-btn"
+            onClick={onAdd}
           >
             {buttonLabel}
           </Button>
@@ -69,7 +74,9 @@ export default function TableView({
                 <TableCell
                   className="view-table-head-cell"
                   align="right"
-                />
+                >
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
 
@@ -92,15 +99,15 @@ export default function TableView({
                     ))}
 
                   <TableCell className="view-actions-cell">
-                    <IconButton>
+                    <IconButton onClick={() => onView?.(row)}>
                       <VisibilityRoundedIcon className="view-icon-view" />
                     </IconButton>
 
-                    <IconButton>
+                    <IconButton onClick={() => onEdit?.(row)}>
                       <EditRoundedIcon className="view-icon-edit" />
                     </IconButton>
 
-                    <IconButton>
+                    <IconButton onClick={() => onDelete?.(row)}>
                       <DeleteRoundedIcon className="view-icon-delete" />
                     </IconButton>
                   </TableCell>

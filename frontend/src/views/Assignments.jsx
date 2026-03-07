@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TableView from "../components/TableViews";
+import TableView from "../components/TableView";
 import { getAssignments } from "../api/api";
 
 export default function Assignments() {

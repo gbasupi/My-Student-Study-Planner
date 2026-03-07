@@ -1,3 +1,17 @@
+import { Paper, Typography } from "@mui/material";
+
 export default function Dashboard() {
-  return <h1 style={{ color: "white" }}>Dashboard</h1>;
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        p: 3,
+        borderRadius: 4,
+        border: "1px solid #e5e7eb",
+        bgcolor: "#fff",
+      }}
+    >
+      <Typography>Dashboard content loading...</Typography>
+    </Paper>
+  );
 }

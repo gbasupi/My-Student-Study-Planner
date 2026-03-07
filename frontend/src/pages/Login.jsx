@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -15,7 +16,7 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-export default function Login({ onGoRegister = () => {}, onLogin = () => {} }) {
+export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
@@ -59,8 +60,30 @@ export default function Login({ onGoRegister = () => {}, onLogin = () => {} }) {
         throw new Error(msg);
       }
 
-      localStorage.setItem("token", data.token);
-      onLogin(data);
+      const token = data.token;
+
+      const userRes = await fetch("/api/auth/user/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      const userData = await userRes.json();
+
+      if (!userRes.ok) {
+        throw new Error(userData?.detail || "Failed to load user profile");
+      }
+
+      onLogin({
+        token,
+        user: {
+          username: userData.username,
+          email: userData.email,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+        },
+      });
     } catch (error) {
       setErr(error.message || "Something went wrong");
     } finally {
@@ -69,7 +92,7 @@ export default function Login({ onGoRegister = () => {}, onLogin = () => {} }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+     <Box sx={{ width: "100%" }} className="app-bg">
       <Container maxWidth="sm">
         <Paper
           elevation={10}
@@ -142,10 +165,10 @@ export default function Login({ onGoRegister = () => {}, onLogin = () => {} }) {
             <Divider>OR</Divider>
 
             <Button
-              type="button"
+              component={RouterLink}
+              to="/register"
               variant="outlined"
               sx={{ textTransform: "none" }}
-              onClick={onGoRegister}
             >
               Create an account
             </Button>

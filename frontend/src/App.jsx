@@ -1,33 +1,34 @@
 import { useState } from "react";
-import Login from "./pages/Login";
-import Registration from "./pages/Registration";
-import Dashboard from "./pages/Dashboard";
+import AppRoutes from "./components/Routes";
 import "./index.css";
 
 export default function App() {
-  const [page, setPage] = useState("login");
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const handleLogin = ({ token, user }) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    setToken(token);
+    setUser(user);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    setPage("login");
+    localStorage.removeItem("user");
+    setToken("");
+    setUser(null);
   };
 
   return (
-    <div className="app-bg">
-      <div className="app-content">
-        {isLoggedIn ? (
-          <Dashboard onLogout={handleLogout} />
-        ) : page === "login" ? (
-          <Login
-            onGoRegister={() => setPage("register")}
-            onLogin={() => setIsLoggedIn(true)}
-          />
-        ) : (
-          <Registration onGoLogin={() => setPage("login")} />
-        )}
-      </div>
-    </div>
+    <AppRoutes
+      token={token}
+      user={user}
+      onLogin={handleLogin}
+      onLogout={handleLogout}
+    />
   );
 }

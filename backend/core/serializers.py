@@ -25,30 +25,35 @@ class ModuleSerializer(serializers.ModelSerializer):
 # EXAMS serializer
 # -----------------------------
 class ExamSerializer(serializers.ModelSerializer):
+    module_code = serializers.CharField(source="module.module_code", read_only=True)
+
     class Meta:
         model = Exam
-        fields = ["id", "module", "exam_date", "location", "notes"]
-        read_only_fields = ["id"]
-
+        fields = ["id", "module", "module_code", "name", "exam_date", "location", "notes"]
+        read_only_fields = ["id", "module_code"]
 
 # -----------------------------
 # ASSIGNMENT SERIALIZER
 # -----------------------------
 class AssignmentSerializer(serializers.ModelSerializer):
+    module_code = serializers.CharField(source="module.module_code", read_only=True)
+
     class Meta:
         model = Assignment
-        fields = ["id", "module", "title", "due_date", "status", "weight"]
-        read_only_fields = ["id"]
+        fields = ["id", "module", "module_code", "title", "due_date", "status", "weight"]
+        read_only_fields = ["id", "module_code"]
 
 
 # -----------------------------
 # STUDY TASK SERIALIZER
 # -----------------------------
 class StudyTaskSerializer(serializers.ModelSerializer):
+    module_code = serializers.CharField(source="module.module_code", read_only=True)
+
     class Meta:
         model = StudyTask
-        fields = ["id", "module", "title", "target_date", "duration_minutes", "is_completed"]
-        read_only_fields = ["id"]
+        fields = ["id", "module", "module_code", "title", "target_date", "duration_minutes", "is_completed",]
+        read_only_fields = ["id", "module_code"]
 
 
 # -----------------------------

@@ -1,25 +1,43 @@
+import { useEffect, useState } from "react";
 import TableView from "../components/TableViews";
-
-const assignments = [
-  {
-    id: 1,
-    module: "COMPSCI5100",
-    title: "Coursework 1",
-    dueDate: "2026-03-28 23:59",
-    status: "Pending",
-    weight: "30%",
-  },
-  {
-    id: 2,
-    module: "COMPSCI4084",
-    title: "Systems Report",
-    dueDate: "2026-04-10 17:00",
-    status: "Submitted",
-    weight: "40%",
-  },
-];
+import { getAssignments } from "../api/api";
 
 export default function Assignments() {
+  const [assignments, setAssignments] = useState([]);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const data = await getAssignments();
+
+        const statusMap = {
+          P: "Pending",
+          S: "Submitted",
+          G: "Graded",
+        };
+
+        const formatted = data.map((assignment) => ({
+          id: assignment.id,
+          module: assignment.module_code,
+          title: assignment.title,
+          dueDate: new Date(assignment.due_date).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          status: statusMap[assignment.status] || assignment.status,
+          weight: `${assignment.weight}%`,
+        }));
+
+        setAssignments(formatted);
+      } catch {}
+    };
+
+    fetchAssignments();
+  }, []);
+
   return (
     <TableView
       title="Assignments"

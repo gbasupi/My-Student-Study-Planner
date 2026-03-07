@@ -1,23 +1,36 @@
+import { useEffect, useState } from "react";
 import TableView from "../components/TableViews";
-
-const exams = [
-  {
-    id: 1,
-    module: "COMPSCI5100",
-    name: "Final Exam",
-    examDate: "2026-05-12 09:00",
-    location: "Boyd Orr Building",
-  },
-  {
-    id: 2,
-    module: "COMPSCI4084",
-    name: "Midterm Exam",
-    examDate: "2026-04-02 14:00",
-    location: "James Watt South",
-  },
-];
+import { getExams } from "../api/api";
 
 export default function Exams() {
+  const [exams, setExams] = useState([]);
+
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        const data = await getExams();
+
+        const formatted = data.map((exam) => ({
+          id: exam.id,
+          module: exam.module_code,
+          name: exam.name,
+          examDate: new Date(exam.exam_date).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          location: exam.location,
+        }));
+
+        setExams(formatted);
+      } catch {}
+    };
+
+    fetchExams();
+  }, []);
+
   return (
     <TableView
       title="Exams"

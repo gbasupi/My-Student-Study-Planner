@@ -1,32 +1,42 @@
+import { useEffect, useState } from "react";
 import TableView from "../components/TableViews";
-
-const studyTasks = [
-  {
-    id: 1,
-    module: "COMPSCI5100",
-    title: "Revise neural networks",
-    targetDate: "2026-03-18",
-    duration: "90 mins",
-    completed: "No",
-  },
-  {
-    id: 2,
-    module: "COMPSCI4084",
-    title: "Finish lab exercises",
-    targetDate: "2026-03-20",
-    duration: "120 mins",
-    completed: "Yes",
-  },
-];
+import { getTasks } from "../api/api";
 
 export default function StudyTasks() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const data = await getTasks();
+
+        const formatted = data.map((task) => ({
+          id: task.id,
+          module: task.module_code,
+          title: task.title,
+          targetDate: new Date(task.target_date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }),
+          duration: `${task.duration_minutes} mins`,
+          completed: task.is_completed ? "Yes" : "No",
+        }));
+
+        setTasks(formatted);
+      } catch {}
+    };
+
+    fetchTasks();
+  }, []);
+
   return (
     <TableView
       title="Study Tasks"
-      subtitle="Plan and track your next study sessions"
+      subtitle="Plan and track your study sessions"
       buttonLabel="Add task"
       columns={["Module", "Title", "Target Date", "Duration", "Completed"]}
-      rows={studyTasks}
+      rows={tasks}
     />
   );
 }

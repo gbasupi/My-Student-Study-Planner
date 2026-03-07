@@ -1,22 +1,29 @@
+import { useEffect, useState } from "react";
 import TableView from "../components/TableViews";
-
-const modules = [
-  {
-    id: 1,
-    code: "COMPSCI5100",
-    title:
-      "Machine Learning & Artificial Intelligence for Data Scientists",
-    semester: "1",
-  },
-  {
-    id: 2,
-    code: "COMPSCI4084",
-    title: "Programming and Systems Development",
-    semester: "1",
-  },
-];
+import { getModules } from "../api/api";
 
 export default function Modules() {
+  const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const data = await getModules();
+
+        const formatted = data.map((module) => ({
+          id: module.id,
+          module_code: module.module_code,
+          title: module.title,
+          semester: module.semester,
+        }));
+
+        setModules(formatted);
+      } catch {}
+    };
+
+    fetchModules();
+  }, []);
+
   return (
     <TableView
       title="Modules"

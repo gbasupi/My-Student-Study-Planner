@@ -1,0 +1,51 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("/glasgow.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.app-bg {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background-image: url("/glasgow.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.app-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.views-content{
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+}

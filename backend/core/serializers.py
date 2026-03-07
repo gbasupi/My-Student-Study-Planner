@@ -1,0 +1,88 @@
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from .models import Module, Exam, Assignment, StudyTask
+
+Student = get_user_model()
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ["id", "username", "email", "first_name", "last_name"]
+
+
+# -------------------------
+# MODULE SERIALIZER
+# -------------------------
+class ModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = ["id", "module_code", "title", "semester"]
+        read_only_fields = ["id", "student"]
+
+
+# -----------------------------
+# EXAMS serializer
+# -----------------------------
+class ExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = ["id", "module", "exam_date", "location", "notes"]
+        read_only_fields = ["id"]
+
+
+# -----------------------------
+# ASSIGNMENT SERIALIZER
+# -----------------------------
+class AssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = ["id", "module", "title", "due_date", "status", "weight"]
+        read_only_fields = ["id"]
+
+
+# -----------------------------
+# STUDY TASK SERIALIZER
+# -----------------------------
+class StudyTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudyTask
+        fields = ["id", "module", "title", "target_date", "duration_minutes", "is_completed"]
+        read_only_fields = ["id"]
+
+
+# -----------------------------
+# REGISTRATION SERIALIZER
+# -----------------------------
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
+    password2 = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Student
+        fields = ["first_name", "last_name", "email", "password", "password2"]
+
+    def validate_email(self, value):
+        email = value.strip().lower()
+        if Student.objects.filter(email=email).exists():
+            raise serializers.ValidationError("An account with this email already exists.")
+        return email
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError({"password2": "Passwords do not match."})
+        return attrs
+
+    def create(self, validated_data):
+        email = validated_data["email"].strip().lower()
+        password = validated_data.pop("password")
+        validated_data.pop("password2")
+
+        user = Student.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+            first_name=validated_data.get("first_name", ""),
+            last_name=validated_data.get("last_name", ""),
+        )
+        return user

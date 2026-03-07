@@ -23,7 +23,7 @@ export default function StudyTasks() {
   return (
     <TableView
       title="Study Tasks"
-      subtitle="Plan and track your next study sessions🔥"
+      subtitle="Plan and track your next study sessions"
       buttonLabel="Add task"
       columns={["Module", "Title", "Target Date", "Duration", "Completed"]}
       rows={studyTasks}

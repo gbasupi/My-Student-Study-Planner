@@ -90,34 +90,22 @@ export default function Registration() {
   };
 
   return (
-    <Box sx={{ width: "100%" }} className="app-bg">
+    <Box className="app-bg">
       <Container maxWidth="sm">
-        <Paper
-          elevation={10}
-          sx={{
-            borderRadius: 4,
-            overflow: "hidden",
-            backdropFilter: "blur(8px)",
-            backgroundColor: "rgba(255,255,255,0.9)",
-          }}
-        >
-          <Box sx={{ p: 4, bgcolor: "#111827", color: "white" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <SchoolRoundedIcon sx={{ fontSize: 36 }} />
+        <Paper elevation={10} className="auth-paper">
+          <Box className="auth-header">
+            <Box className="auth-header-content">
+              <SchoolRoundedIcon className="auth-icon" />
               <Box>
-                <Typography variant="h5" fontWeight={700}>
+                <Typography variant="h5" className="auth-title">
                   My Student Study Planner
                 </Typography>
               </Box>
             </Box>
           </Box>
 
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ p: 4, display: "flex", flexDirection: "column", gap: 3 }}
-          >
-            <Typography variant="h6" fontWeight={700}>
+          <Box component="form" onSubmit={handleSubmit} className="auth-form">
+            <Typography variant="h6" className="auth-heading">
               Create account
             </Typography>
 
@@ -206,7 +194,7 @@ export default function Registration() {
               variant="contained"
               size="large"
               disabled={loading}
-              sx={{ py: 1.5, textTransform: "none", fontWeight: 600 }}
+              className="auth-submit-btn"
             >
               {loading ? "Creating account..." : "Create Account"}
             </Button>
@@ -217,7 +205,7 @@ export default function Registration() {
               component={RouterLink}
               to="/login"
               variant="outlined"
-              sx={{ textTransform: "none" }}
+              className="auth-switch-btn"
             >
               Already have an account? Log in
             </Button>

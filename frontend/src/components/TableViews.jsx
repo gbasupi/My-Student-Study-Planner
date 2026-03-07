@@ -26,7 +26,6 @@ export default function TableView({
 }) {
   return (
     <Box className="views-content">
-      {/* Header */}
       <Paper elevation={0} className="view-section-card">
         <Box className="view-section-header">
           <Box>
@@ -49,7 +48,6 @@ export default function TableView({
         </Box>
       </Paper>
 
-      {/* Table */}
       <Paper elevation={0} className="view-table-card">
         <TableContainer>
           <Table>

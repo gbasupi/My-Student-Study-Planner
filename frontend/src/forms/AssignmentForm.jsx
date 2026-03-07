@@ -9,6 +9,7 @@ import {
   Stack,
   MenuItem,
 } from "@mui/material";
+import { getModules } from "../api/api";
 
 const emptyForm = {
   module: "",
@@ -25,6 +26,22 @@ export default function AssignmentForm({
   initialData,
 }) {
   const [form, setForm] = useState(emptyForm);
+  const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const data = await getModules();
+        setModules(data);
+      } catch (error) {
+        console.error("Failed to fetch modules:", error);
+      }
+    };
+
+    if (open) {
+      fetchModules();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (initialData) {
@@ -62,19 +79,29 @@ export default function AssignmentForm({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <form onSubmit={handleSubmit}>
-        <DialogTitle>ADD ASSIGNMENT FORM</DialogTitle>
+        <DialogTitle>
+          {initialData ? "EDIT ASSIGNMENT FORM" : "ADD ASSIGNMENT FORM"}
+        </DialogTitle>
 
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
-              label="Module ID"
+              select
+              label="Module"
               name="module"
-              type="number"
               value={form.module}
               onChange={handleChange}
               required
               fullWidth
-            />
+            >
+              {modules
+                .sort((a, b) => a.module_code.localeCompare(b.module_code))
+                .map((module) => (
+                  <MenuItem key={module.id} value={module.id}>
+                    {module.module_code} — {module.title}
+                  </MenuItem>
+                ))}
+            </TextField>
 
             <TextField
               label="Assignment Title"

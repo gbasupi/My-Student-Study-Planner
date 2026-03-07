@@ -115,7 +115,7 @@ const displayName =
             />
 
             <Typography
-              variant="h7"
+              variant="h5"
               sx={{
                 fontWeight: 800,
                 letterSpacing: -0.3,

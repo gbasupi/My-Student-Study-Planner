@@ -57,14 +57,64 @@ export const deleteModule = (id) =>
 // -----------------------------
 export const getExams = () => apiFetch("/exams/");
 
+export const createExam = (data) =>
+  apiFetch("/exams/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+export const updateExam = (id, data) =>
+  apiFetch(`/exams/${id}/`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+export const deleteExam = (id) =>
+  apiFetch(`/exams/${id}/`, {
+    method: "DELETE",
+  });
 
 // -----------------------------
 // ASSIGNMENTS
 // -----------------------------
 export const getAssignments = () => apiFetch("/assignments/");
 
+export const createAssignment = (data) =>
+  apiFetch("/assignments/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+export const updateAssignment = (id, data) =>
+  apiFetch(`/assignments/${id}/`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+export const deleteAssignment = (id) =>
+  apiFetch(`/assignments/${id}/`, {
+    method: "DELETE",
+  });
+
 
 // -----------------------------
 // STUDY TASKS
 // -----------------------------
 export const getTasks = () => apiFetch("/tasks/");
+
+export const createTask = (data) =>
+  apiFetch("/tasks/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+export const updateTask = (id, data) =>
+  apiFetch(`/tasks/${id}/`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+export const deleteTask = (id) =>
+  apiFetch(`/tasks/${id}/`, {
+    method: "DELETE",
+  });

@@ -19,9 +19,17 @@ export default function Exams() {
 
       const formatted = data.map((exam) => ({
         id: exam.id,
-        module: exam.module_code,
-        title: exam.title,
+        module: exam.module,
+        name: exam.name,
         exam_date: exam.exam_date,
+        location: exam.location,
+        examDate: new Date(exam.exam_date).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       }));
 
       setExams(formatted);
@@ -72,10 +80,16 @@ export default function Exams() {
     <>
       <TableView
         title="Exams"
-        subtitle="Create and manage your exams"
+        subtitle="Upcoming exams and revision planning"
         buttonLabel="Add exam"
-        columns={["Module", "Title", "Exam Date"]}
-        rows={exams}
+        columns={["Module", "Name", "Exam Date", "Location"]}
+        rows={exams.map((exam) => ({
+          id: exam.id,
+          module: exam.module,
+          name: exam.name,
+          examDate: exam.examDate,
+          location: exam.location,
+        }))}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}
         onDelete={handleDelete}

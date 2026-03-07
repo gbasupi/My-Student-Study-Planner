@@ -11,8 +11,10 @@ import {
 
 const emptyForm = {
   module: "",
-  title: "",
+  name: "",
   exam_date: "",
+  location: "",
+  notes: "",
 };
 
 export default function ExamForm({
@@ -27,8 +29,12 @@ export default function ExamForm({
     if (initialData) {
       setForm({
         module: initialData.module || "",
-        title: initialData.title || "",
-        exam_date: initialData.exam_date || "",
+        name: initialData.name || "",
+        exam_date: initialData.exam_date
+          ? initialData.exam_date.slice(0, 16)
+          : "",
+        location: initialData.location || "",
+        notes: initialData.notes || "",
       });
     } else {
       setForm(emptyForm);
@@ -36,15 +42,19 @@ export default function ExamForm({
   }, [initialData, open]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      module: Number(form.module),
+    });
   };
 
   return (
@@ -55,8 +65,9 @@ export default function ExamForm({
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
-              label="Module"
+              label="Module ID"
               name="module"
+              type="number"
               value={form.module}
               onChange={handleChange}
               required
@@ -64,9 +75,9 @@ export default function ExamForm({
             />
 
             <TextField
-              label="Exam Title"
-              name="title"
-              value={form.title}
+              label="Exam Name"
+              name="name"
+              value={form.name}
               onChange={handleChange}
               required
               fullWidth
@@ -75,11 +86,29 @@ export default function ExamForm({
             <TextField
               label="Exam Date"
               name="exam_date"
-              type="date"
+              type="datetime-local"
               value={form.exam_date}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
               required
+              fullWidth
+            />
+
+            <TextField
+              label="Location"
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              fullWidth
+            />
+
+            <TextField
+              label="Notes"
+              name="notes"
+              value={form.notes}
+              onChange={handleChange}
+              multiline
+              rows={3}
               fullWidth
             />
           </Stack>

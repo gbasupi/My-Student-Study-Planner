@@ -20,8 +20,10 @@ export default function StudyTasks() {
       const formatted = data.map((task) => ({
         id: task.id,
         module: task.module,
-        task_title: task.task_title,
-        task_date: task.task_date,
+        title: task.title,
+        target_date: task.target_date,
+        duration_minutes: task.duration_minutes,
+        is_completed: task.is_completed ? "Yes" : "No",
       }));
 
       setTasks(formatted);
@@ -74,7 +76,7 @@ export default function StudyTasks() {
         title="Study Tasks"
         subtitle="Create and manage your study tasks"
         buttonLabel="Add study task"
-        columns={["Module", "Task Title", "Task Date"]}
+        columns={["Module", "Title", "Target Date", "Duration", "Completed"]}
         rows={tasks}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

@@ -9,7 +9,6 @@ import {
   Stack,
   MenuItem,
 } from "@mui/material";
-import "../styles/Form.css";
 
 const emptyForm = {
   module_code: "",
@@ -46,24 +45,19 @@ export default function ModuleForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      semester: Number(form.semester),
+    });
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-      maxWidth="md"
-      className="form-dialog"
-    >
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <form onSubmit={handleSubmit}>
-        <DialogTitle className="form-title">
-          ADD MODULE FORM
-        </DialogTitle>
+        <DialogTitle>ADD MODULE FORM</DialogTitle>
 
-        <DialogContent className="form-content">
-          <Stack className="form-stack">
+        <DialogContent>
+          <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
               label="Module Code"
               name="module_code"
@@ -71,7 +65,6 @@ export default function ModuleForm({
               onChange={handleChange}
               required
               fullWidth
-              className="form-field"
             />
 
             <TextField
@@ -81,7 +74,6 @@ export default function ModuleForm({
               onChange={handleChange}
               required
               fullWidth
-              className="form-field"
             />
 
             <TextField
@@ -92,29 +84,20 @@ export default function ModuleForm({
               onChange={handleChange}
               required
               fullWidth
-              className="form-field"
             >
               <MenuItem value="1">Semester 1</MenuItem>
               <MenuItem value="2">Semester 2</MenuItem>
-              <MenuItem value="3">Semester 3</MenuItem>
+              <MenuItem value="3"> Semester 3</MenuItem>
             </TextField>
           </Stack>
         </DialogContent>
 
-        <DialogActions className="form-actions">
-          <Button
-            onClick={onClose}
-            variant="outlined"
-            className="form-cancel-btn"
-          >
+        <DialogActions>
+          <Button onClick={onClose} color="error">
             Cancel
           </Button>
 
-          <Button
-            type="submit"
-            variant="contained"
-            className="form-submit-btn"
-          >
+          <Button type="submit" variant="contained">
             {initialData ? "Update module" : "Create module"}
           </Button>
         </DialogActions>

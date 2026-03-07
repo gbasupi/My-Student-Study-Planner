@@ -7,12 +7,15 @@ import {
   TextField,
   Button,
   Stack,
+  MenuItem,
 } from "@mui/material";
 
 const emptyForm = {
   module: "",
   title: "",
   due_date: "",
+  status: "P",
+  weight: "",
 };
 
 export default function AssignmentForm({
@@ -28,7 +31,11 @@ export default function AssignmentForm({
       setForm({
         module: initialData.module || "",
         title: initialData.title || "",
-        due_date: initialData.due_date || "",
+        due_date: initialData.due_date
+          ? initialData.due_date.slice(0, 16)
+          : "",
+        status: initialData.status || "P",
+        weight: initialData.weight || "",
       });
     } else {
       setForm(emptyForm);
@@ -36,15 +43,20 @@ export default function AssignmentForm({
   }, [initialData, open]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      module: Number(form.module),
+      weight: Number(form.weight),
+    });
   };
 
   return (
@@ -55,8 +67,9 @@ export default function AssignmentForm({
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
-              label="Module"
+              label="Module ID"
               name="module"
+              type="number"
               value={form.module}
               onChange={handleChange}
               required
@@ -75,10 +88,34 @@ export default function AssignmentForm({
             <TextField
               label="Due Date"
               name="due_date"
-              type="date"
+              type="datetime-local"
               value={form.due_date}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
+              required
+              fullWidth
+            />
+
+            <TextField
+              select
+              label="Status"
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+              required
+              fullWidth
+            >
+              <MenuItem value="P">Pending</MenuItem>
+              <MenuItem value="S">Submitted</MenuItem>
+              <MenuItem value="G">Graded</MenuItem>
+            </TextField>
+
+            <TextField
+              label="Weight (%)"
+              name="weight"
+              type="number"
+              value={form.weight}
+              onChange={handleChange}
               required
               fullWidth
             />

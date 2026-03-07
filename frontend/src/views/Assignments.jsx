@@ -21,7 +21,15 @@ export default function Assignments() {
         id: assignment.id,
         module: assignment.module,
         title: assignment.title,
-        due_date: assignment.due_date,
+        due_date: new Date(assignment.due_date).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        status: assignment.status,
+        weight: assignment.weight,
       }));
 
       setAssignments(formatted);
@@ -74,7 +82,7 @@ export default function Assignments() {
         title="Assignments"
         subtitle="Create and manage your assignments"
         buttonLabel="Add assignment"
-        columns={["Module", "Title", "Due Date"]}
+        columns={["Module", "Title", "Due Date", "Status", "Weight"]}
         rows={assignments}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

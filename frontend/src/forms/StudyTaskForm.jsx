@@ -7,12 +7,15 @@ import {
   TextField,
   Button,
   Stack,
+  MenuItem,
 } from "@mui/material";
 
 const emptyForm = {
   module: "",
-  task_title: "",
-  task_date: "",
+  title: "",
+  target_date: "",
+  duration_minutes: "",
+  is_completed: false,
 };
 
 export default function StudyTaskForm({
@@ -27,8 +30,10 @@ export default function StudyTaskForm({
     if (initialData) {
       setForm({
         module: initialData.module || "",
-        task_title: initialData.task_title || "",
-        task_date: initialData.task_date || "",
+        title: initialData.title || "",
+        target_date: initialData.target_date || "",
+        duration_minutes: initialData.duration_minutes || "",
+        is_completed: initialData.is_completed ?? false,
       });
     } else {
       setForm(emptyForm);
@@ -36,15 +41,24 @@ export default function StudyTaskForm({
   }, [initialData, open]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]:
+        name === "is_completed"
+          ? value === "true"
+          : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      module: Number(form.module),
+      duration_minutes: Number(form.duration_minutes),
+    });
   };
 
   return (
@@ -55,8 +69,9 @@ export default function StudyTaskForm({
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
-              label="Module"
+              label="Module ID"
               name="module"
+              type="number"
               value={form.module}
               onChange={handleChange}
               required
@@ -65,23 +80,46 @@ export default function StudyTaskForm({
 
             <TextField
               label="Task Title"
-              name="task_title"
-              value={form.task_title}
+              name="title"
+              value={form.title}
               onChange={handleChange}
               required
               fullWidth
             />
 
             <TextField
-              label="Task Date"
-              name="task_date"
+              label="Target Date"
+              name="target_date"
               type="date"
-              value={form.task_date}
+              value={form.target_date}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
               required
               fullWidth
             />
+
+            <TextField
+              label="Duration (minutes)"
+              name="duration_minutes"
+              type="number"
+              value={form.duration_minutes}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+
+            <TextField
+              select
+              label="Completed"
+              name="is_completed"
+              value={String(form.is_completed)}
+              onChange={handleChange}
+              required
+              fullWidth
+            >
+              <MenuItem value="false">No</MenuItem>
+              <MenuItem value="true">Yes</MenuItem>
+            </TextField>
           </Stack>
         </DialogContent>
 

@@ -19,11 +19,15 @@ export default function StudyTasks() {
 
       const formatted = data.map((task) => ({
         id: task.id,
-        module: task.module,
-        title: task.title,
-        target_date: task.target_date,
-        duration_minutes: task.duration_minutes,
-        is_completed: task.is_completed ? "Yes" : "No",
+          module: task.module_code,
+          title: task.title,
+          targetDate: new Date(task.target_date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }),
+          duration: `${task.duration_minutes} mins`,
+          completed: task.is_completed ? "Yes" : "No",
       }));
 
       setTasks(formatted);

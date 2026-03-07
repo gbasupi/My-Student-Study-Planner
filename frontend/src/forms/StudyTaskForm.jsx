@@ -8,7 +8,10 @@ import {
   Button,
   Stack,
   MenuItem,
+  Chip,
+  Typography,
 } from "@mui/material";
+import { getModules } from "../api/api";
 
 const emptyForm = {
   module: "",
@@ -18,6 +21,16 @@ const emptyForm = {
   is_completed: false,
 };
 
+const durations = [
+  { label: "15m", value: 15 },
+  { label: "30m", value: 30 },
+  { label: "45m", value: 45 },
+  { label: "1h", value: 60 },
+  { label: "1.5h", value: 90 },
+  { label: "2h", value: 120 },
+  { label: "3h", value: 180 },
+];
+
 export default function StudyTaskForm({
   open,
   onClose,
@@ -25,6 +38,22 @@ export default function StudyTaskForm({
   initialData,
 }) {
   const [form, setForm] = useState(emptyForm);
+  const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const data = await getModules();
+        setModules(data);
+      } catch (error) {
+        console.error("Failed to fetch modules:", error);
+      }
+    };
+
+    if (open) {
+      fetchModules();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (initialData) {
@@ -45,10 +74,7 @@ export default function StudyTaskForm({
 
     setForm((prev) => ({
       ...prev,
-      [name]:
-        name === "is_completed"
-          ? value === "true"
-          : value,
+      [name]: name === "is_completed" ? value === "true" : value,
     }));
   };
 
@@ -56,7 +82,7 @@ export default function StudyTaskForm({
     e.preventDefault();
     onSubmit({
       ...form,
-      module: Number(form.module),
+      module: form.module ? Number(form.module) : null,
       duration_minutes: Number(form.duration_minutes),
     });
   };
@@ -64,19 +90,28 @@ export default function StudyTaskForm({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <form onSubmit={handleSubmit}>
-        <DialogTitle>ADD STUDY TASK FORM</DialogTitle>
+        <DialogTitle>
+          {initialData ? "EDIT STUDY TASK FORM" : "ADD STUDY TASK FORM"}
+        </DialogTitle>
 
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
-              label="Module ID"
+              select
+              label="Module"
               name="module"
-              type="number"
               value={form.module}
               onChange={handleChange}
-              required
               fullWidth
-            />
+            >
+              {modules
+                .sort((a, b) => a.module_code.localeCompare(b.module_code))
+                .map((module) => (
+                  <MenuItem key={module.id} value={module.id}>
+                    {module.module_code} — {module.title}
+                  </MenuItem>
+                ))}
+            </TextField>
 
             <TextField
               label="Task Title"
@@ -98,15 +133,28 @@ export default function StudyTaskForm({
               fullWidth
             />
 
-            <TextField
-              label="Duration (minutes)"
-              name="duration_minutes"
-              type="number"
-              value={form.duration_minutes}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+            <Typography variant="subtitle2">Study Duration</Typography>
+
+            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 1 }}>
+              {durations.map((duration) => (
+                <Chip
+                  key={duration.value}
+                  label={duration.label}
+                  clickable
+                  color={
+                    Number(form.duration_minutes) === duration.value
+                      ? "primary"
+                      : "default"
+                  }
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      duration_minutes: duration.value,
+                    }))
+                  }
+                />
+              ))}
+            </Stack>
 
             <TextField
               select

@@ -17,19 +17,25 @@ export default function Assignments() {
     try {
       const data = await getAssignments();
 
+        const statusMap = {
+          P: "Pending",
+          S: "Submitted",
+          G: "Graded",
+        };
+
       const formatted = data.map((assignment) => ({
         id: assignment.id,
-        module: assignment.module,
-        title: assignment.title,
-        due_date: new Date(assignment.due_date).toLocaleString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        status: assignment.status,
-        weight: assignment.weight,
+          module: assignment.module_code,
+          title: assignment.title,
+          dueDate: new Date(assignment.due_date).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          status: statusMap[assignment.status] || assignment.status,
+          weight: `${assignment.weight}%`,
       }));
 
       setAssignments(formatted);

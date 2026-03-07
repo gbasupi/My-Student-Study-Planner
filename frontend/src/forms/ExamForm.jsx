@@ -4,10 +4,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   Button,
-  Stack,
+  TextField,
+  MenuItem,
 } from "@mui/material";
+import { getModules } from "../api/api";
 
 const emptyForm = {
   module: "",
@@ -17,113 +18,140 @@ const emptyForm = {
   notes: "",
 };
 
-export default function ExamForm({
-  open,
-  onClose,
-  onSubmit,
-  initialData,
-}) {
-  const [form, setForm] = useState(emptyForm);
+export default function ExamForm({ open, onClose, onSubmit, initialData }) {
+  const [modules, setModules] = useState([]);
+  const [formData, setFormData] = useState(emptyForm);
+
+  const formatDateTimeLocal = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const pad = (n) => String(n).padStart(2, "0");
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+      date.getDate()
+    )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const data = await getModules();
+        setModules(data);
+      } catch (error) {
+        console.error("Failed to fetch modules:", error);
+      }
+    };
+
+    if (open) {
+      fetchModules();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (initialData) {
-      setForm({
+      setFormData({
         module: initialData.module || "",
         name: initialData.name || "",
-        exam_date: initialData.exam_date
-          ? initialData.exam_date.slice(0, 16)
-          : "",
+        exam_date: formatDateTimeLocal(initialData.exam_date),
         location: initialData.location || "",
         notes: initialData.notes || "",
       });
     } else {
-      setForm(emptyForm);
+      setFormData(emptyForm);
     }
   }, [initialData, open]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onSubmit({
-      ...form,
-      module: Number(form.module),
+      ...formData,
+      module: Number(formData.module),
     });
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <form onSubmit={handleSubmit}>
-        <DialogTitle>ADD EXAM FORM</DialogTitle>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>
+        {initialData ? "EDIT EXAM FORM" : "ADD EXAM FORM"}
+      </DialogTitle>
 
-        <DialogContent>
-          <Stack spacing={2.5} sx={{ mt: 1 }}>
-            <TextField
-              label="Module ID"
-              name="module"
-              type="number"
-              value={form.module}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+      <DialogContent>
+        <TextField
+          select
+          fullWidth
+          margin="normal"
+          label="Module"
+          name="module"
+          value={formData.module}
+          onChange={handleChange}
+          required
+        >
+          {modules
+            .sort((a, b) => a.module_code.localeCompare(b.module_code))
+            .map((module) => (
+              <MenuItem key={module.id} value={module.id}>
+                {module.module_code} — {module.title}
+              </MenuItem>
+            ))}
+        </TextField>
 
-            <TextField
-              label="Exam Name"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Exam Name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
-            <TextField
-              label="Exam Date"
-              name="exam_date"
-              type="datetime-local"
-              value={form.exam_date}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              required
-              fullWidth
-            />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Exam Date"
+          name="exam_date"
+          type="datetime-local"
+          value={formData.exam_date}
+          onChange={handleChange}
+          InputLabelProps={{ shrink: true }}
+        />
 
-            <TextField
-              label="Location"
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-              fullWidth
-            />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Location"
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+        />
 
-            <TextField
-              label="Notes"
-              name="notes"
-              value={form.notes}
-              onChange={handleChange}
-              multiline
-              rows={3}
-              fullWidth
-            />
-          </Stack>
-        </DialogContent>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Notes"
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+          multiline
+          rows={4}
+        />
+      </DialogContent>
 
-        <DialogActions>
-          <Button onClick={onClose} color="error">
-            Cancel
-          </Button>
-
-          <Button type="submit" variant="contained">
-            {initialData ? "Update exam" : "Create exam"}
-          </Button>
-        </DialogActions>
-      </form>
+      <DialogActions>
+        <Button onClick={onClose} color="error">
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} variant="contained">
+          {initialData ? "Update Exam" : "Create Exam"}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

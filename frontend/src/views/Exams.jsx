@@ -19,10 +19,12 @@ export default function Exams() {
 
       const formatted = data.map((exam) => ({
         id: exam.id,
-        module: exam.module,
+        module: exam.module_code,
+        module_id: exam.module,
         name: exam.name,
         exam_date: exam.exam_date,
         location: exam.location,
+        notes: exam.notes || "",
         examDate: new Date(exam.exam_date).toLocaleString("en-GB", {
           day: "2-digit",
           month: "short",
@@ -43,7 +45,15 @@ export default function Exams() {
   }, []);
 
   const handleOpenForm = (exam = null) => {
-    setSelectedExam(exam);
+    if (exam) {
+      setSelectedExam({
+        ...exam,
+        module: exam.module_id,
+      });
+    } else {
+      setSelectedExam(null);
+    }
+
     setOpenForm(true);
   };
 
@@ -86,9 +96,12 @@ export default function Exams() {
         rows={exams.map((exam) => ({
           id: exam.id,
           module: exam.module,
+          module_id: exam.module_id,
           name: exam.name,
           examDate: exam.examDate,
+          exam_date: exam.exam_date,
           location: exam.location,
+          notes: exam.notes,
         }))}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

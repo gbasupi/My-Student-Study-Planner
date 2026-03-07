@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TableView from "../components/TableViews";
+import TableView from "../components/TableView";
 import { getExams } from "../api/api";
 
 export default function Exams() {

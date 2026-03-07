@@ -7,9 +7,9 @@ import {
   TextField,
   Button,
   Stack,
-  Typography,
-  Box,
+  MenuItem,
 } from "@mui/material";
+import "../styles/Form.css";
 
 const emptyForm = {
   module_code: "",
@@ -54,93 +54,58 @@ export default function ModuleForm({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="sm"
-      PaperProps={{
-        sx: {
-          borderRadius: 3,
-          backgroundColor: "#f9fafb",
-        },
-      }}
+      maxWidth="md"
+      className="form-dialog"
     >
       <form onSubmit={handleSubmit}>
-        {/* Header */}
-        <DialogTitle sx={{ p: 0 }}>
-          <Box
-            sx={{
-              px: 3,
-              py: 2.5,
-              background: "linear-gradient(135deg, #2f56d9 0%, #4b8df8 100%)",
-              color: "#fff",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: 22,
-                fontWeight: 800,
-                letterSpacing: 0.4,
-              }}
-            >
-              ADD MODULE FORM
-            </Typography>
-          </Box>
+        <DialogTitle className="form-title">
+          ADD MODULE FORM
         </DialogTitle>
 
-        {/* Form fields */}
-        <DialogContent sx={{ pt: 3 }}>
-          <Stack spacing={2.5}>
+        <DialogContent className="form-content">
+          <Stack className="form-stack">
             <TextField
               label="Module Code"
               name="module_code"
               value={form.module_code}
               onChange={handleChange}
-              placeholder="COMPSCI5012"
               required
               fullWidth
+              className="form-field"
             />
 
             <TextField
-              label="Module Title"
+              label="Title"
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="Internet Technology"
               required
               fullWidth
+              className="form-field"
             />
 
             <TextField
+              select
               label="Semester"
               name="semester"
               value={form.semester}
               onChange={handleChange}
-              placeholder="1"
               required
               fullWidth
-            />
+              className="form-field"
+            >
+              <MenuItem value="1">Semester 1</MenuItem>
+              <MenuItem value="2">Semester 2</MenuItem>
+              <MenuItem value="3">Semester 3</MenuItem>
+            </TextField>
           </Stack>
         </DialogContent>
 
-        {/* Buttons */}
-        <DialogActions
-          sx={{
-            px: 3,
-            pb: 2.5,
-            justifyContent: "flex-end",
-            gap: 1.5,
-          }}
-        >
+        <DialogActions className="form-actions">
           <Button
             onClick={onClose}
-            variant="contained"
-            sx={{
-              backgroundColor: "#ef4444",
-              fontWeight: 600,
-              borderRadius: 2,
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#dc2626",
-              },
-            }}
+            variant="outlined"
+            className="form-cancel-btn"
           >
             Cancel
           </Button>
@@ -148,17 +113,9 @@ export default function ModuleForm({
           <Button
             type="submit"
             variant="contained"
-            sx={{
-              backgroundColor: "#2563eb",
-              fontWeight: 600,
-              borderRadius: 2,
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#1d4ed8",
-              },
-            }}
+            className="form-submit-btn"
           >
-            {initialData ? "Update Module" : "Create Module"}
+            {initialData ? "Update module" : "Create module"}
           </Button>
         </DialogActions>
       </form>

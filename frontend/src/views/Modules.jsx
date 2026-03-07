@@ -20,7 +20,7 @@ export default function Modules() {
   return (
     <TableView
       title="Modules"
-      subtitle="Create and manage your modules🍀"
+      subtitle="Create and manage your modules"
       buttonLabel="Add module"
       columns={["Module Code", "Title", "Semester"]}
       rows={modules}

@@ -53,10 +53,7 @@ export default function Login({ onLogin = () => {} }) {
       const data = await res.json();
 
       if (!res.ok) {
-        const msg =
-          data?.non_field_errors?.[0] ||
-          data?.detail ||
-          "Login failed";
+        const msg = data?.non_field_errors?.[0] || data?.detail || "Login failed";
         throw new Error(msg);
       }
 
@@ -92,33 +89,21 @@ export default function Login({ onLogin = () => {} }) {
   };
 
   return (
-     <Box sx={{ width: "100%" }} className="app-bg">
+    <Box className="app-bg">
       <Container maxWidth="sm">
-        <Paper
-          elevation={10}
-          sx={{
-            borderRadius: 4,
-            overflow: "hidden",
-            backdropFilter: "blur(8px)",
-            backgroundColor: "rgba(255,255,255,0.9)",
-          }}
-        >
-          <Box sx={{ p: 4, bgcolor: "#111827", color: "white" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <SchoolRoundedIcon sx={{ fontSize: 36 }} />
+        <Paper elevation={10} className="auth-paper">
+          <Box className="auth-header">
+            <Box className="auth-header-content">
+              <SchoolRoundedIcon className="auth-icon" />
               <Box>
-                <Typography variant="h5" fontWeight={700}>
+                <Typography variant="h5" className="auth-title">
                   My Student Study Planner
                 </Typography>
               </Box>
             </Box>
           </Box>
 
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ p: 4, display: "flex", flexDirection: "column", gap: 3 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} className="auth-form">
             {err && <Alert severity="error">{err}</Alert>}
 
             <TextField
@@ -157,7 +142,7 @@ export default function Login({ onLogin = () => {} }) {
               variant="contained"
               size="large"
               disabled={loading}
-              sx={{ py: 1.5, textTransform: "none", fontWeight: 600 }}
+              className="auth-submit-btn"
             >
               {loading ? "Signing in..." : "Sign In"}
             </Button>
@@ -168,7 +153,7 @@ export default function Login({ onLogin = () => {} }) {
               component={RouterLink}
               to="/register"
               variant="outlined"
-              sx={{ textTransform: "none" }}
+              className="auth-switch-btn"
             >
               Create an account
             </Button>

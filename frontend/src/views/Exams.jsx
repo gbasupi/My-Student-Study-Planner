@@ -21,7 +21,7 @@ export default function Exams() {
   return (
     <TableView
       title="Exams"
-      subtitle="Upcoming exams and revision planning😀"
+      subtitle="Upcoming exams and revision planning"
       buttonLabel="Add exam"
       columns={["Module", "Name", "Exam Date", "Location"]}
       rows={exams}

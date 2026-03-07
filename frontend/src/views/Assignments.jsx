@@ -23,7 +23,7 @@ export default function Assignments() {
   return (
     <TableView
       title="Assignments"
-      subtitle="Track and manage your assignment now😎"
+      subtitle="Track and manage your assignment now"
       buttonLabel="Add assignment"
       columns={["Module", "Title", "Due Date", "Status", "Weight"]}
       rows={assignments}

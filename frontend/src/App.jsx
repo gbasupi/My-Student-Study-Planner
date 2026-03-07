@@ -1,6 +1,10 @@
 import { useState } from "react";
 import AppRoutes from "./components/Routes";
 import "./index.css";
+import "./styles/Auth.css";
+import "./styles/View.css";
+import "./styles/Layout.css";
+
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");

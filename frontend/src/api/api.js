@@ -1,9 +1,11 @@
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
 
   return {
     "Content-Type": "application/json",
-    Authorization: `Token ${token}`,
+    Authorization: token ? `Token ${token}` : "",
   };
 };
 
@@ -12,12 +14,14 @@ const handleResponse = async (response) => {
     throw new Error(`HTTP ${response.status}`);
   }
 
+  if (response.status === 204) return null;
+
   const data = await response.json();
   return Array.isArray(data) ? data : data.results || data;
 };
 
 const apiFetch = async (endpoint, options = {}) => {
-  const response = await fetch(`/api${endpoint}`, {
+  const response = await fetch(`${API_URL}/api${endpoint}`, {
     ...options,
     headers: {
       ...getAuthHeaders(),
@@ -27,7 +31,6 @@ const apiFetch = async (endpoint, options = {}) => {
 
   return handleResponse(response);
 };
-
 
 // -----------------------------
 // MODULES

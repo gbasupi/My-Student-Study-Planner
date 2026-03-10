@@ -92,7 +92,12 @@ export default function Exams() {
         title="Exams"
         subtitle="Upcoming exams and revision planning"
         buttonLabel="Add exam"
-        columns={["Module", "Name", "Exam Date", "Location"]}
+        columns={[
+  { key: "module", label: "Module" },
+  { key: "name", label: "Name" },
+  { key: "examDate", label: "Exam Date" },
+  { key: "location", label: "Location" },
+]}
         rows={exams.map((exam) => ({
           id: exam.id,
           module: exam.module,

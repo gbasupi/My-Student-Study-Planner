@@ -88,7 +88,13 @@ export default function Assignments() {
         title="Assignments"
         subtitle="Create and manage your assignments"
         buttonLabel="Add assignment"
-        columns={["Module", "Title", "Due Date", "Status", "Weight"]}
+        columns={[
+  { key: "module", label: "Module" },
+  { key: "title", label: "Title" },
+  { key: "dueDate", label: "Due Date" },
+  { key: "status", label: "Status" },
+  { key: "weight", label: "Weight" },
+]}
         rows={assignments}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

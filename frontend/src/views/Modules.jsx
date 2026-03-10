@@ -70,7 +70,11 @@ export default function Modules() {
         title="Modules"
         subtitle="Create and manage your modules"
         buttonLabel="Add module"
-        columns={["Module Code", "Title", "Semester"]}
+        columns={[
+          { key: "module_code", label: "Module Code" },
+          { key: "title", label: "Title" },
+          { key: "semester", label: "Semester" },
+        ]}
         rows={modules}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

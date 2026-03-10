@@ -80,7 +80,13 @@ export default function StudyTasks() {
         title="Study Tasks"
         subtitle="Create and manage your study tasks"
         buttonLabel="Add study task"
-        columns={["Module", "Title", "Target Date", "Duration", "Completed"]}
+        columns={[
+  { key: "module", label: "Module" },
+  { key: "title", label: "Title" },
+  { key: "targetDate", label: "Target Date" },
+  { key: "duration", label: "Duration" },
+  { key: "completed", label: "Completed" },
+]}
         rows={tasks}
         onAdd={() => handleOpenForm()}
         onEdit={handleOpenForm}

@@ -90,16 +90,18 @@ REST_FRAMEWORK = {
     ],
 }
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,my-student-study-planner-backend-production.up.railway.app"
-).split(",")
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "my-student-study-planner-backend-production.up.railway.app",
+]
 
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:5173,https://my-student-study-planner-production.up.railway.app"
-).split(",")
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://my-student-study-planner-production.up.railway.app",
+]
 
+CORS_ALLOW_CREDENTIALS = True
 
 
 CORS_ALLOW_CREDENTIALS = True

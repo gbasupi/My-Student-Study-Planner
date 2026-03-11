@@ -1,4 +1,7 @@
-const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_URL = (
+  import.meta.env.VITE_API_URL || 
+  'https://my-student-study-planner-backend-production.up.railway.app'
+).replace(/\/$/, "");
 
 const getAuthHeaders = () => {
   const token = sessionStorage.getItem("token");

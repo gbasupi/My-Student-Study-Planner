@@ -44,6 +44,8 @@ export default function StudyTasks() {
 
       const formatted = data.map((task) => ({
         id: task.id,
+
+        // display values
         module: task.module_code,
         title: task.title,
         targetDate: new Date(task.target_date).toLocaleDateString("en-GB", {
@@ -53,6 +55,12 @@ export default function StudyTasks() {
         }),
         duration: `${task.duration_minutes} mins`,
         completed: task.is_completed ? "Yes" : "No",
+
+        // raw values for editing
+        module_id: task.module,
+        target_date: task.target_date,
+        duration_minutes: task.duration_minutes,
+        is_completed: task.is_completed,
       }));
 
       setTasks(formatted);
@@ -65,18 +73,34 @@ export default function StudyTasks() {
     fetchTasks();
   }, []);
 
-  // Stat calculations
-  const totalMinutes = rawTasks.reduce((sum, t) => sum + (t.duration_minutes || 0), 0);
+  const totalMinutes = rawTasks.reduce(
+    (sum, t) => sum + (t.duration_minutes || 0),
+    0
+  );
+
   const completedMinutes = rawTasks
     .filter((t) => t.is_completed === true || t.is_completed === "true")
     .reduce((sum, t) => sum + (t.duration_minutes || 0), 0);
+
   const completionRate =
     totalMinutes > 0 ? Math.round((completedMinutes / totalMinutes) * 100) : 0;
 
   const toHours = (mins) => (mins / 60).toFixed(1) + "h";
 
   const handleOpenForm = (task = null) => {
-    setSelectedTask(task);
+    if (task) {
+      setSelectedTask({
+        id: task.id,
+        module: task.module_id,
+        title: task.title,
+        target_date: task.target_date,
+        duration_minutes: task.duration_minutes,
+        is_completed: task.is_completed,
+      });
+    } else {
+      setSelectedTask(null);
+    }
+
     setOpenForm(true);
   };
 
@@ -92,6 +116,7 @@ export default function StudyTasks() {
       } else {
         await createTask(formData);
       }
+
       await fetchTasks();
       handleCloseForm();
     } catch (error) {

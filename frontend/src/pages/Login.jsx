@@ -41,7 +41,7 @@ export default function Login({ onLogin = () => {} }) {
         }),
       });
 
-      const token = tokenData.token;
+      const token = tokenData?.token || tokenData?.key || tokenData?.access;
 
       const userData = await apiFetch("/api/auth/user/", {
         headers: {

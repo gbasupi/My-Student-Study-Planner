@@ -8,27 +8,40 @@ export const buildApiUrl = (path) => {
 };
 
 export async function apiFetch(path, options = {}) {
-  const response = await fetch(buildApiUrl(path), {
+  const url = buildApiUrl(path);
+
+  const response = await fetch(url, {
+    ...options,
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
-    ...options,
   });
+
+  const contentType = response.headers.get("content-type") || "";
+  const rawText = await response.text();
 
   let data = null;
 
-  try {
-    data = await response.json();
-  } catch {
-    data = null;
+  if (rawText) {
+    if (contentType.includes("application/json")) {
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        throw new Error(`Invalid JSON returned from ${url}`);
+      }
+    } else {
+      data = rawText;
+    }
   }
 
   if (!response.ok) {
     const message =
       data?.detail ||
       data?.non_field_errors?.[0] ||
-      "Request failed";
+      data?.message ||
+      (typeof data === "string" ? data : null) ||
+      `Request failed (${response.status})`;
 
     const error = new Error(message);
     error.status = response.status;

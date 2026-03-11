@@ -1,3 +1,4 @@
+//client class
 const trimSlash = (value = "") => value.replace(/\/+$/, "");
 
 const API_BASE_URL = trimSlash(import.meta.env.VITE_API_URL || "");

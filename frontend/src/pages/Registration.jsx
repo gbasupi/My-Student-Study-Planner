@@ -16,6 +16,7 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { API_BASE, parseJsonResponse } from "../api";
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -44,8 +45,7 @@ export default function Registration() {
     try {
       setLoading(true);
 
-      const API = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-      const res = await fetch(`${API}/api/auth/register/`, {
+      const res = await fetch(`${API_BASE}/api/auth/register/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export default function Registration() {
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
 
       if (!res.ok) {
         const msg =

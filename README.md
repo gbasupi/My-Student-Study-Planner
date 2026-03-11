@@ -32,17 +32,27 @@ venv\Scripts\activate  # For Windows
 3. Install Requirements and dependencies
 
 ```
+# For Backend
+cd /backend
 pip install -r requirements.txt
 npm install
 ```
 
-3. Create Superuser for Admin
+and
+
+```
+# For Frontend
+cd /frontend
+npm install
+```
+
+4. Create Superuser for Admin
 
 ```
 python manage.py createsuperuser
 ```
 
-4. Start Code
+5. Start Code
 
 ```
 # For Backend
@@ -59,7 +69,7 @@ cd /frontend
 npm run dev   
 ```
 
-4. Tests and Coverage Reports
+6. Tests and Coverage Reports
    Run Test
 
 ```

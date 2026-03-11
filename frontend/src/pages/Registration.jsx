@@ -44,7 +44,8 @@ export default function Registration() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/register/", {
+      const API = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      const res = await fetch(`${API}/api/auth/register/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

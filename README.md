@@ -1,5 +1,5 @@
 
-# My-Student-Study-Planner
+# My Student Study Planner
 
 > COMPSCI5012 Internet Technology (M) 2025-26
 
@@ -90,17 +90,22 @@ coverage html
 
 7. Techology Stack
 
+```
 Frontend
 - React
 - Vite
 - JavaScript
 - CSS
+```
 
+and 
+
+```
 Backend
 - Django
 - Django REST Framework
 - SQLite
-
+```
 
 
 8. Project Structure

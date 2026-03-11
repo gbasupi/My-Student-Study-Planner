@@ -47,9 +47,6 @@ export default function Registration() {
 
       const res = await fetch(`${API_BASE}/api/auth/register/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           first_name: firstName.trim(),
           last_name: lastName.trim(),
@@ -84,7 +81,17 @@ export default function Registration() {
         navigate("/login");
       }, 1000);
     } catch (error) {
-      setErr(error.message || "Something went wrong");
+      const data = error.data || {};
+      const msg =
+        data?.email?.[0] ||
+        data?.password?.[0] ||
+        data?.password2?.[0] ||
+        data?.first_name?.[0] ||
+        data?.last_name?.[0] ||
+        error.message ||
+        "Something went wrong";
+
+      setErr(msg);
     } finally {
       setLoading(false);
     }
@@ -197,7 +204,7 @@ export default function Registration() {
               disabled={loading}
               className="auth-submit-btn"
             >
-              {loading ? "Creating account..." : "Create Account"}
+              {loading ? "Creating account..." : "Create account"}
             </Button>
 
             <Divider>OR</Divider>
@@ -208,7 +215,7 @@ export default function Registration() {
               variant="outlined"
               className="auth-switch-btn"
             >
-              Already have an account? Log in
+              Already have an account
             </Button>
           </Box>
         </Paper>

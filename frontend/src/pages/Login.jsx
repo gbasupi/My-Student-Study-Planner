@@ -27,15 +27,8 @@ export default function Login({ onLogin = () => {} }) {
     e.preventDefault();
     setErr("");
 
-    if (!email.trim()) {
-      setErr("Please enter your email");
-      return;
-    }
-
-    if (!password.trim()) {
-      setErr("Please enter your password");
-      return;
-    }
+    if (!email.trim()) return setErr("Please enter your email");
+    if (!password.trim()) return setErr("Please enter your password");
 
     try {
       setLoading(true);

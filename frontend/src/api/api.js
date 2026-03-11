@@ -47,7 +47,15 @@ const handleResponse = async (response) => {
 };
 
 const apiFetch = async (endpoint, options = {}) => {
-  const response = await fetch(`${API_URL}/api${endpoint}`, {
+  const normalizedEndpoint = endpoint.startsWith("/api")
+    ? endpoint
+    : `/api${endpoint}`;
+
+  const url = API_URL
+    ? `${API_URL}${normalizedEndpoint}`
+    : normalizedEndpoint;
+
+  const response = await fetch(url, {
     ...options,
     headers: {
       ...getAuthHeaders(),

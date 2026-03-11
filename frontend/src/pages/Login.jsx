@@ -9,17 +9,21 @@ import {
   Alert,
   Divider,
   InputAdornment,
+  IconButton,
   Container,
 } from "@mui/material";
 
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { apiFetch } from "../api/client";
 
 export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -106,7 +110,7 @@ export default function Login({ onLogin = () => {} }) {
 
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -115,6 +119,18 @@ export default function Login({ onLogin = () => {} }) {
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockOutlinedIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      onMouseDown={(e) => e.preventDefault()}
+                      edge="end"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}

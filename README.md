@@ -15,16 +15,16 @@ My Student Study Planner is a web application developed for COMPSCI5012 Internet
 1. Clone the Project
 
 ```
-git clone https://github.com/gbasupi/My-Student-Study-Planner 
-cd /backend # For Backend
-cd /frontend # For Frontend
+git clone https://github.com/gbasupi/My-Student-Study-Planner
+cd My-Student-Study-Planner
 
 ```
 
 2. Create & Activate Python Virtual Environment
 
 ```
-python3.12 -m venv venv/
+cd backend
+python3.12 -m venv venv
 source venv/bin/activate  # For MacOS/Linux
 venv\Scripts\activate  # For Windows
 ```
@@ -32,17 +32,16 @@ venv\Scripts\activate  # For Windows
 3. Install Requirements and dependencies
 
 ```
-# For Backend
-cd /backend
+# Backend
+cd backend
 pip install -r requirements.txt
-npm install
 ```
 
 and
 
 ```
-# For Frontend
-cd /frontend
+# Frontend
+cd frontend
 npm install
 ```
 
@@ -55,8 +54,8 @@ python manage.py createsuperuser
 5. Start Code
 
 ```
-# For Backend
-cd /backend
+# Backend
+cd backend
 python manage.py makemigrations 
 python manage.py migrate
 python manage.py runserver
@@ -64,8 +63,8 @@ python manage.py runserver
 and
 
 ```
-# For Frontend
-cd /frontend
+# Frontend
+cd frontend
 npm run dev   
 ```
 
@@ -87,6 +86,55 @@ OR for a detailed HTML report:
 ```
 coverage html
 ```
+
+7. Techology Stack
+
+Frontend
+- React
+- Vite
+- JavaScript
+- CSS
+
+Backend
+- Django
+- Django REST Framework
+- SQLite
+
+
+
+8. Project Structure
+
+```
+My-Student-Study-Planner
+│
+├── backend/                     # Django REST API
+│   ├── config/                  # Django project 
+│   │   ├── settings.py
+│   │   └── urls.py
+│   │
+│   ├── core/                    # Main backend 
+│   │   ├── models.py            # Database models
+│   │   ├── serializers.py       # API serializers
+│   │   ├── views.py             # API views
+│   │   └── urls.py              # App routes
+│   │
+│   ├── manage.py                # Django management script
+│   └── requirements.txt         # Python dependencies
+│
+├── frontend/                    # React frontend (Vite)
+│   ├── src/
+│   │   ├── api/                 # API client
+│   │   ├── components/          # Reusable UI components
+│   │   ├── forms/               # Forms for (assignments, exams, modules, study tasks)
+│   │   ├── pages/               # Application pages
+│   │   ├── views/               # Views for (assignments, exams, modules, study tasks)
+│   │   └── styles/              # CSS styles
+│   │
+│   └── package.json             # Node dependencies
+│
+└── README.md                    # Project documentation
+```
+
 
 ## Team Members
 

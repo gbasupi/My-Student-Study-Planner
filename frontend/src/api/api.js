@@ -1,8 +1,7 @@
-const trimSlash = (value = "") => value.replace(/\/+$/, "");
-
-// If VITE_API_URL is empty, requests stay relative and become /api/...
-// That works with local Vite proxy and with same-domain production setups.
-const API_URL = trimSlash(import.meta.env.VITE_API_URL || "");
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  "https://my-student-study-planner-backend-production.up.railway.app"
+).replace(/\/$/, "");
 
 const getAuthHeaders = () => {
   const token = sessionStorage.getItem("token");
@@ -16,27 +15,35 @@ const getAuthHeaders = () => {
 const handleResponse = async (response) => {
   if (response.status === 204) return null;
 
-  let data = null;
+  const contentType = response.headers.get("content-type") || "";
+  const text = await response.text();
+
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `Server returned non-JSON response (${response.status}). Response starts with: ${text.slice(0, 80)}`
+    );
+  }
+
+  let data;
   try {
-    data = await response.json();
+    data = JSON.parse(text);
   } catch {
-    data = null;
+    throw new Error("Invalid JSON returned from server");
   }
 
   if (!response.ok) {
     const message =
       data?.detail ||
-      data?.message ||
-      data?.error ||
+      data?.non_field_errors?.[0] ||
+      data?.email?.[0] ||
+      data?.password?.[0] ||
+      data?.password2?.[0] ||
       `HTTP ${response.status}`;
 
-    const error = new Error(message);
-    error.status = response.status;
-    error.data = data;
-    throw error;
+    throw new Error(message);
   }
 
-  return Array.isArray(data) ? data : data?.results || data;
+  return Array.isArray(data) ? data : data.results || data;
 };
 
 const apiFetch = async (endpoint, options = {}) => {
@@ -58,6 +65,38 @@ const apiFetch = async (endpoint, options = {}) => {
 
   return handleResponse(response);
 };
+
+// -----------------------------
+// AUTH
+// -----------------------------
+export const loginUser = (email, password) =>
+  apiFetch("/auth/token/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: email.trim(),
+      password,
+    }),
+  });
+
+export const registerUser = (data) =>
+  apiFetch("/auth/register/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+export const getCurrentUser = (token) =>
+  fetch(`${API_URL}/api/auth/user/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  }).then(handleResponse);
 
 // -----------------------------
 // MODULES

@@ -80,6 +80,10 @@ export default function StudyTaskForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!form.duration_minutes) {
+      alert("Please select a study duration.");
+      return;
+    }
     onSubmit({
       ...form,
       module: form.module ? Number(form.module) : null,

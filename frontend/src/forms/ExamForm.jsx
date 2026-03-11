@@ -7,6 +7,7 @@ import {
   Button,
   TextField,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import { getModules } from "../api/api";
 
@@ -21,6 +22,7 @@ const emptyForm = {
 export default function ExamForm({ open, onClose, onSubmit, initialData }) {
   const [modules, setModules] = useState([]);
   const [formData, setFormData] = useState(emptyForm);
+  const [dateError, setDateError] = useState("");
 
   const formatDateTimeLocal = (dateString) => {
     if (!dateString) return "";
@@ -59,6 +61,7 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
     } else {
       setFormData(emptyForm);
     }
+    setDateError("");
   }, [initialData, open]);
 
   const handleChange = (e) => {
@@ -67,9 +70,27 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "exam_date") {
+      if (value && new Date(value) <= new Date()) {
+        setDateError("Exam date must be in the future.");
+      } else {
+        setDateError("");
+      }
+    }
   };
 
   const handleSubmit = () => {
+    if (!formData.exam_date) {
+      setDateError("Please select an exam date.");
+      return;
+    }
+
+    if (new Date(formData.exam_date) <= new Date()) {
+      setDateError("Exam date must be in the future.");
+      return;
+    }
+
     onSubmit({
       ...formData,
       module: Number(formData.module),
@@ -83,6 +104,11 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
       </DialogTitle>
 
       <DialogContent>
+        {dateError && (
+          <Alert severity="error" sx={{ mb: 1, mt: 1 }}>
+            {dateError}
+          </Alert>
+        )}
         <TextField
           select
           fullWidth
@@ -121,6 +147,9 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
           value={formData.exam_date}
           onChange={handleChange}
           InputLabelProps={{ shrink: true }}
+          inputProps={{ min: new Date().toISOString().slice(0, 16) }}
+          error={!!dateError}
+          helperText={dateError}
         />
 
         <TextField

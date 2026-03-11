@@ -15,7 +15,7 @@ import {
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { API_BASE, parseJsonResponse } from "../api";
+import { loginUser, getCurrentUser } from "../api";
 
 export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -40,38 +40,12 @@ export default function Login({ onLogin = () => {} }) {
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE}/api/auth/token/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: email.trim(),
-          password,
-        }),
-      });
-
-      const data = await parseJsonResponse(res);
-
-      if (!res.ok) {
-        const msg = data?.non_field_errors?.[0] || data?.detail || "Login failed";
-        throw new Error(msg);
-      }
-
+      const data = await loginUser(email, password);
       const token = data.token;
 
-      const userRes = await fetch(`${API_BASE}/api/auth/user/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-      });
+      sessionStorage.setItem("token", token);
 
-      const userData = await parseJsonResponse(userRes);
-
-      if (!userRes.ok) {
-        throw new Error(userData?.detail || "Failed to load user profile");
-      }
+      const userData = await getCurrentUser(token);
 
       onLogin({
         token,

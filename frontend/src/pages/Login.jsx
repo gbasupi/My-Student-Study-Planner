@@ -15,6 +15,7 @@ import {
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { apiFetch } from "../api/client";
 
 export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -26,51 +27,27 @@ export default function Login({ onLogin = () => {} }) {
     e.preventDefault();
     setErr("");
 
-    if (!email.trim()) {
-      setErr("Please enter your email");
-      return;
-    }
-
-    if (!password.trim()) {
-      setErr("Please enter your password");
-      return;
-    }
+    if (!email.trim()) return setErr("Please enter your email");
+    if (!password.trim()) return setErr("Please enter your password");
 
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/token/", {
+      const tokenData = await apiFetch("/api/auth/token/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           username: email.trim(),
           password,
         }),
       });
 
-      const data = await res.json();
+      const token = tokenData.token;
 
-      if (!res.ok) {
-        const msg = data?.non_field_errors?.[0] || data?.detail || "Login failed";
-        throw new Error(msg);
-      }
-
-      const token = data.token;
-
-      const userRes = await fetch("/api/auth/user/", {
+      const userData = await apiFetch("/api/auth/user/", {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
       });
-
-      const userData = await userRes.json();
-
-      if (!userRes.ok) {
-        throw new Error(userData?.detail || "Failed to load user profile");
-      }
 
       onLogin({
         token,

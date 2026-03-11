@@ -16,6 +16,7 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { apiFetch } from "../api/client";
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -44,12 +45,8 @@ export default function Registration() {
     try {
       setLoading(true);
 
-      const API = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-      const res = await fetch(`${API}/api/auth/register/`, {
+      await apiFetch("/api/auth/register/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           first_name: firstName.trim(),
           last_name: lastName.trim(),
@@ -58,20 +55,6 @@ export default function Registration() {
           password2: confirmPassword,
         }),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        const msg =
-          data?.email?.[0] ||
-          data?.password?.[0] ||
-          data?.password2?.[0] ||
-          data?.first_name?.[0] ||
-          data?.last_name?.[0] ||
-          data?.detail ||
-          "Registration failed";
-        throw new Error(msg);
-      }
 
       setSuccess("Account created successfully");
       setFirstName("");
@@ -84,7 +67,17 @@ export default function Registration() {
         navigate("/login");
       }, 1000);
     } catch (error) {
-      setErr(error.message || "Something went wrong");
+      const data = error.data || {};
+      const msg =
+        data?.email?.[0] ||
+        data?.password?.[0] ||
+        data?.password2?.[0] ||
+        data?.first_name?.[0] ||
+        data?.last_name?.[0] ||
+        error.message ||
+        "Something went wrong";
+
+      setErr(msg);
     } finally {
       setLoading(false);
     }
@@ -197,7 +190,7 @@ export default function Registration() {
               disabled={loading}
               className="auth-submit-btn"
             >
-              {loading ? "Creating account..." : "Create Account"}
+              {loading ? "Creating account..." : "Create account"}
             </Button>
 
             <Divider>OR</Divider>
@@ -208,7 +201,7 @@ export default function Registration() {
               variant="outlined"
               className="auth-switch-btn"
             >
-              Already have an account? Log in
+              Already have an account
             </Button>
           </Box>
         </Paper>

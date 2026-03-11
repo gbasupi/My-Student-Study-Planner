@@ -1,30 +1,54 @@
-const API_URL = (
-  import.meta.env.VITE_API_URL || 
-  'https://my-student-study-planner-backend-production.up.railway.app'
-).replace(/\/$/, "");
+const trimSlash = (value = "") => value.replace(/\/+$/, "");
+
+// If VITE_API_URL is empty, requests stay relative and become /api/...
+// That works with local Vite proxy and with same-domain production setups.
+const API_URL = trimSlash(import.meta.env.VITE_API_URL || "");
 
 const getAuthHeaders = () => {
   const token = sessionStorage.getItem("token");
 
   return {
     "Content-Type": "application/json",
-    Authorization: token ? `Token ${token}` : "",
+    ...(token ? { Authorization: `Token ${token}` } : {}),
   };
 };
 
 const handleResponse = async (response) => {
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
   if (response.status === 204) return null;
 
-  const data = await response.json();
-  return Array.isArray(data) ? data : data.results || data;
+  let data = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    const message =
+      data?.detail ||
+      data?.message ||
+      data?.error ||
+      `HTTP ${response.status}`;
+
+    const error = new Error(message);
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
+
+  return Array.isArray(data) ? data : data?.results || data;
 };
 
 const apiFetch = async (endpoint, options = {}) => {
-  const response = await fetch(`${API_URL}/api${endpoint}`, {
+  const normalizedEndpoint = endpoint.startsWith("/api")
+    ? endpoint
+    : `/api${endpoint}`;
+
+  const url = API_URL
+    ? `${API_URL}${normalizedEndpoint}`
+    : normalizedEndpoint;
+
+  const response = await fetch(url, {
     ...options,
     headers: {
       ...getAuthHeaders(),
@@ -56,7 +80,6 @@ export const deleteModule = (id) =>
   apiFetch(`/modules/${id}/`, {
     method: "DELETE",
   });
-
 
 // -----------------------------
 // EXAMS
@@ -101,7 +124,6 @@ export const deleteAssignment = (id) =>
   apiFetch(`/assignments/${id}/`, {
     method: "DELETE",
   });
-
 
 // -----------------------------
 // STUDY TASKS

@@ -69,7 +69,7 @@ export default function Dashboard() {
       <Box className="dashboard-stats-row">
         <Box className="dashboard-stats-item">
           <StatCard
-            title="Total Subjects"
+            title="TOTAL MODULES"
             value={modules.length}
             colorClass="purple"
             icon={<CalendarTodayOutlinedIcon />}
@@ -78,7 +78,7 @@ export default function Dashboard() {
 
         <Box className="dashboard-stats-item">
           <StatCard
-            title="Upcoming Exams"
+            title="UPCOMING EXAMS"
             value={upcomingExams}
             colorClass="red"
             icon={<ErrorOutlineOutlinedIcon />}
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
         <Box className="dashboard-stats-item">
           <StatCard
-            title="Assignment Progress"
+            title="ASSIGNMENT PROGRESS"
             value={`${assignmentProgress}%`}
             colorClass="green"
             icon={<CheckCircleOutlineOutlinedIcon />}
@@ -96,7 +96,7 @@ export default function Dashboard() {
 
         <Box className="dashboard-stats-item">
           <StatCard
-            title="Study Tasks Done"
+            title="STUDY TASK DONE"
             value={`${completedTasks}/${tasks.length}`}
             colorClass="blue"
             icon={<TrendingUpOutlinedIcon />}

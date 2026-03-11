@@ -11,6 +11,12 @@ ALLOWED_HOSTS = os.environ.get(
     "127.0.0.1,localhost,my-student-study-planner-backend-production.up.railway.app"
 ).split(",")
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://my-student-study-planner-backend-production.up.railway.app",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

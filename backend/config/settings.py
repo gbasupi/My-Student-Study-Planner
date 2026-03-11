@@ -135,8 +135,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+import os
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")

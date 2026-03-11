@@ -36,11 +36,7 @@ export default function Login({ onLogin = () => {} }) {
       const data = await loginUser(email, password);
       const token = data.token;
 
-<<<<<<< HEAD
-      const token = tokenData?.token || tokenData?.key || tokenData?.access;
-=======
       sessionStorage.setItem("token", token);
->>>>>>> 87fd9e62f642f3ae16e81bf6d9b4fedb0a9d2747
 
       const userData = await getCurrentUser(token);
 

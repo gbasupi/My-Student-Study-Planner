@@ -15,6 +15,7 @@ import {
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { API_BASE, parseJsonResponse } from "../api";
 
 export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ export default function Login({ onLogin = () => {} }) {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/token/", {
+      const res = await fetch(`${API_BASE}/api/auth/token/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export default function Login({ onLogin = () => {} }) {
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
 
       if (!res.ok) {
         const msg = data?.non_field_errors?.[0] || data?.detail || "Login failed";
@@ -59,14 +60,14 @@ export default function Login({ onLogin = () => {} }) {
 
       const token = data.token;
 
-      const userRes = await fetch("/api/auth/user/", {
+      const userRes = await fetch(`${API_BASE}/api/auth/user/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
       });
 
-      const userData = await userRes.json();
+      const userData = await parseJsonResponse(userRes);
 
       if (!userRes.ok) {
         throw new Error(userData?.detail || "Failed to load user profile");

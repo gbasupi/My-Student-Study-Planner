@@ -16,7 +16,8 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { API_BASE, parseJsonResponse } from "../api";
+
+import { apiFetch } from "../api/client";
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function Registration() {
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE}/api/auth/register/`, {
+      await apiFetch("/api/auth/register/", {
         method: "POST",
         body: JSON.stringify({
           first_name: firstName.trim(),
@@ -56,21 +57,8 @@ export default function Registration() {
         }),
       });
 
-      const data = await parseJsonResponse(res);
-
-      if (!res.ok) {
-        const msg =
-          data?.email?.[0] ||
-          data?.password?.[0] ||
-          data?.password2?.[0] ||
-          data?.first_name?.[0] ||
-          data?.last_name?.[0] ||
-          data?.detail ||
-          "Registration failed";
-        throw new Error(msg);
-      }
-
       setSuccess("Account created successfully");
+
       setFirstName("");
       setLastName("");
       setEmail("");
@@ -82,6 +70,7 @@ export default function Registration() {
       }, 1000);
     } catch (error) {
       const data = error.data || {};
+
       const msg =
         data?.email?.[0] ||
         data?.password?.[0] ||

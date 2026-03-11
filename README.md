@@ -9,6 +9,7 @@ My Student Study Planner is a web application developed for COMPSCI5012 Internet
 ## Project Requirements
 
 - [Python 3.12](https://www.python.org/downloads/release/python-3120/)
+- [Node v23.7.0](https://nodejs.org/en/blog/release/v23.7.0)
 
 ## Project Setup
 

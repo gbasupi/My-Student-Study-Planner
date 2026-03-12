@@ -132,7 +132,7 @@ My-Student-Study-Planner
 │   │   ├── api/                 # API client
 │   │   ├── components/          # Reusable UI components
 │   │   ├── forms/               # Forms for (assignments, exams, modules, study tasks)
-│   │   ├── pages/               # Application pages
+│   │   ├── pages/               # Application pages (login, registration, dashboard)
 │   │   ├── views/               # Views for (assignments, exams, modules, study tasks)
 │   │   └── styles/              # CSS styles
 │   │

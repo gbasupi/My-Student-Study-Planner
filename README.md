@@ -114,7 +114,7 @@ Backend
 My-Student-Study-Planner
 │
 ├── backend/                     # Django REST API
-│   ├── config/                  # Django project 
+│   ├── config/                  # Django project config
 │   │   ├── settings.py
 │   │   └── urls.py
 │   │

@@ -144,7 +144,7 @@ My-Student-Study-Planner
 
 ## Team Members
 
-1. Gontse Basupi 3134768B@student.gla.ac.uk
-2. Chang Liu 3113841L@student.gla.ac.uk
-3. Love Kalra 3107255K@student.gla.ac.uk
+1. Chang Liu 3113841L@student.gla.ac.uk
+2. Love Kalra 3107255K@student.gla.ac.uk
+3. Gontse Basupi 3134768B@student.gla.ac.uk
 

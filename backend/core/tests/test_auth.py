@@ -3,6 +3,8 @@ from rest_framework import status
 from django.urls import reverse
 from core.models import Student
 
+
+
 class AuthAPITesting(APITestCase):
     
     def setUp(self):
@@ -25,6 +27,17 @@ class AuthAPITesting(APITestCase):
         response = self.client.post(self.register_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(Student.objects.filter(email="newuser@example.com").exists())
+       
+    def test_register_password_mismatch(self):
+        data = {
+        "email": "another@example.com",
+        "username": "user2",
+        "password": "password123",
+        "password2": "differentpassword"
+    }
+        response = self.client.post(self.register_url, data)
+        self.assertEqual(response.status_code, 400)
+    
 
     def test_login_user(self):
         data = {
@@ -49,3 +62,26 @@ class AuthAPITesting(APITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('email'), self.user.email)
+        
+    def test_register_duplicate_email(self):
+        data = {
+        "email": "teststudent@example.com",
+        "password": "password123",
+        "password2": "password123"
+    }
+
+        response = self.client.post(self.register_url, data)
+
+        self.assertEqual(response.status_code, 400)
+    
+    def test_register_email_is_normalized_to_lowercase(self):
+        data = {
+        "email": "NEWUSER@EXAMPLE.COM",
+        "password": "newpassword123",
+        "password2": "newpassword123"
+    }
+
+        response = self.client.post(self.register_url, data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Student.objects.filter(email="newuser@example.com").exists())

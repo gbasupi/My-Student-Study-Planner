@@ -71,12 +71,13 @@ npm run dev
 
 6. Tests and Coverage Reports
    Run Test
-
+   
+Navigate to the backend directory and run:
 ```
 coverage run manage.py test
 ```
 
-Generate Report
+Generate Coverage Report
 
 ```
 coverage report -m
@@ -85,6 +86,14 @@ coverage report -m
 OR for a detailed HTML report:
 
 ```
+coverage html
+```
+
+Complete Commands
+
+```
+coverage run manage.py test core.tests
+coverage report -m
 coverage html
 ```
 

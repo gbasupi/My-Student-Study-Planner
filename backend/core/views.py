@@ -16,13 +16,7 @@ from .serializers import (
 
 User = get_user_model()
 
-class CurrentUserView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        serializer = CurrentUserSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
     
 # -----------------------------
 # MODULE VIEWSET

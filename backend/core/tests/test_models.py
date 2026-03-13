@@ -17,6 +17,15 @@ class ModelTesting(TestCase):
             title='Introduction to Computer Science',
             semester=1
         )
+        
+    def test_student_string_representation(self):
+        student = Student.objects.create_user(
+        email="student@example.com",
+        username="student",
+        password="password123"
+    )
+
+        self.assertEqual(str(student), "student@example.com")
 
     def test_create_module_model(self):
         self.assertEqual(Module.objects.count(), 1)
@@ -28,6 +37,12 @@ class ModelTesting(TestCase):
         self.assertEqual(self.module.student, self.student)
         self.assertEqual(self.module.student.email, 'teststudent@example.com')
 
+    def test_module_string_representation(self):
+        self.assertEqual(
+        str(self.module),
+        "CS101 : Introduction to Computer Science"
+    )
+    
     def test_create_exam_model(self):
         exam = Exam.objects.create(
             module=self.module,
@@ -40,6 +55,17 @@ class ModelTesting(TestCase):
         self.assertEqual(Exam.objects.count(), 1)
         self.assertEqual(exam.name, 'Midterm Exam')
         self.assertEqual(exam.module, self.module) 
+        
+    def test_exam_string_representation(self):
+        exam = Exam.objects.create(
+        module=self.module,
+        name="Final Exam",
+        exam_date=timezone.now(),
+        location="Hall A"
+    )
+
+        self.assertEqual(str(exam), "Final Exam - CS101")
+            
     def test_create_assignment_model(self):
         assignment = Assignment.objects.create(
             module=self.module,
@@ -52,7 +78,18 @@ class ModelTesting(TestCase):
         self.assertEqual(assignment.title, 'Python Project 1')
         self.assertEqual(assignment.weight, 20)
         self.assertEqual(assignment.module, self.module)
+        
+    def test_assignment_string_representation(self):
+        assignment = Assignment.objects.create(
+        module=self.module,
+        title="Coursework 1",
+        due_date=timezone.now() + timezone.timedelta(days=7),
+        weight=20
+    )
 
+        self.assertEqual(str(assignment), "Coursework 1 (CS101)")
+    
+            
     def test_create_studytask_model(self):
         task = StudyTask.objects.create(
             module=self.module,
@@ -71,7 +108,7 @@ class ModelTesting(TestCase):
             module=self.module,
             title='Practice Exercises',
             target_date=timezone.now().date(),
-            duration_minutes=30,
+            duration_minutes=25,
             is_completed=False
         )
         self.assertFalse(task.is_completed) 
@@ -83,3 +120,15 @@ class ModelTesting(TestCase):
 
         updated_task = StudyTask.objects.get(id=task.id)
         self.assertTrue(updated_task.is_completed)
+        
+    def test_studytask_string_representation(self):
+        task = StudyTask.objects.create(
+        module=self.module,
+        title="Read Chapter 3",
+        target_date=timezone.now().date(),
+        duration_minutes=45
+    )
+
+        self.assertEqual(str(task), "Read Chapter 3 - CS101")
+
+        

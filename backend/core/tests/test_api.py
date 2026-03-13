@@ -46,7 +46,9 @@ class CoreAPITesting(APITestCase):
 
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['module_code'], 'CS101')
-
+        
+    
+        
     def test_create_exam(self):
 
         url = reverse('exams-list')
@@ -58,6 +60,20 @@ class CoreAPITesting(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    
+    def test_list_exams(self):
+        Exam.objects.create(
+        module=self.module,
+        name="Midterm",
+        exam_date=timezone.now(),
+        location="Room A"
+    )
+
+        url = reverse('exams-list')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
 
     def test_create_assignment(self):
 
@@ -70,7 +86,21 @@ class CoreAPITesting(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+    def test_list_assignments(self):
+        Assignment.objects.create(
+        module=self.module,
+        title="Essay",
+        due_date=timezone.now(),
+        weight=20
+    )
 
+        url = reverse('assignments-list')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        
     def test_create_studytask(self):
 
         url = reverse('tasks-list')

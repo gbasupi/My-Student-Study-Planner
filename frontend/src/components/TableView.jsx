@@ -30,7 +30,6 @@ export default function TableView({
   columns,
   rows,
   onAdd,
-  onView,
   onEdit,
   onDelete,
 }) {
@@ -124,9 +123,6 @@ export default function TableView({
                     className="view-actions-cell"
                     align="right"
                   >
-                    <IconButton onClick={() => onView?.(row)}>
-                      <VisibilityRoundedIcon className="view-icon-view" />
-                    </IconButton>
 
                     <IconButton onClick={() => onEdit?.(row)}>
                       <EditRoundedIcon className="view-icon-edit" />

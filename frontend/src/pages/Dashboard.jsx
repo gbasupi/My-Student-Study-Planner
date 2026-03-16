@@ -80,6 +80,7 @@ export default function Dashboard() {
     };
   }, [modules, exams, assignments, tasks]);
 
+  // Prepare data for upcoming exams, pending assignments, and today's tasks to display in the dashboard.
   const upcomingExamItems = exams
     .filter((e) => new Date(e.exam_date) >= now)
     .slice(0, 5)
@@ -120,6 +121,7 @@ export default function Dashboard() {
       };
     });
 
+  // For today's tasks, we can simply take the first 6 tasks.
   const taskItems = tasks.slice(0, 6).map((task) => ({
     id: task.id,
     moduleLabel: getModuleLabel(task),

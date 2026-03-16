@@ -62,6 +62,7 @@ export default function AssignmentForm({
     }
   }, [initialData, open]);
 
+  // Handle changes to form fields and update the form state accordingly
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -70,6 +71,7 @@ export default function AssignmentForm({
     }));
   };
 
+  // Handle form submission, convert module and weight to numbers before submitting
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({

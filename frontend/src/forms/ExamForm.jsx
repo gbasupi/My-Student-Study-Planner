@@ -84,6 +84,7 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
     }
   };
 
+  // Handle form submission, validate exam date before submitting
   const handleSubmit = () => {
     if (!formData.exam_date) {
       setDateError("Please select an exam date.");

@@ -1,3 +1,4 @@
+// Registration.jsx - Registration page component for the study planner app
 import { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
@@ -19,9 +20,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { apiFetch } from "../api/client";
 
+// Main component for the Registration page.
 export default function Registration() {
   const navigate = useNavigate();
 
+  // State variables for form fields, error messages, loading state, and success messages.
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,6 +34,7 @@ export default function Registration() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
+  // Handle form submission for registration, including validation and API calls to create a new user account.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");

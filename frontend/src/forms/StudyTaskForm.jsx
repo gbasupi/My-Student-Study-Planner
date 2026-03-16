@@ -81,7 +81,7 @@ export default function StudyTaskForm({
     }));
   };
 
-  // Handle form submission, validating required fields and converting values as needed before calling onSubmit
+  // Handle form submission, validating required fields and converting values.
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.duration_minutes) {

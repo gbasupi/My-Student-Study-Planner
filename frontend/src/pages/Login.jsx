@@ -1,3 +1,4 @@
+// Login.jsx - Login page component for the study planner app
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -20,6 +21,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { apiFetch } from "../api/client";
 
+// Main component for the Login page, allowing users to sign in to their account
 export default function Login({ onLogin = () => {} }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +29,7 @@ export default function Login({ onLogin = () => {} }) {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Handle form submission for logging in, including validation and API calls to authenticate the user
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
@@ -45,6 +48,7 @@ export default function Login({ onLogin = () => {} }) {
         }),
       });
 
+      // The token may be returned under different keys depending on the backend implementation
       const token = tokenData?.token || tokenData?.key || tokenData?.access;
 
       if (!token) {
@@ -53,6 +57,7 @@ export default function Login({ onLogin = () => {} }) {
 
       sessionStorage.setItem("token", token);
 
+      // Fetch user data using the obtained token to get user details for the session
       const userData = await apiFetch("/api/auth/user/", {
         headers: {
           Authorization: `Token ${token}`,

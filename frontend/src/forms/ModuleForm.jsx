@@ -47,7 +47,7 @@ export default function ModuleForm({
     }));
   };
 
-  
+  // Handle form submission, validating required fields and converting values.
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({

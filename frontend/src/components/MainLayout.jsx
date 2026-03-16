@@ -1,7 +1,7 @@
 /**
  * MainLayout
  * Shared application layout for authenticated pages.
- * Includes header, navigation tabs, welcome banner
+ * Includes header, navigation tabs, and welcome banner.
  */
 import {
   AppBar,

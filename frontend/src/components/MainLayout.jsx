@@ -1,5 +1,5 @@
 /**
- * MainLayout
+ * MainLayout.jsx
  * Shared application layout for authenticated pages.
  * Includes header, navigation tabs, and welcome banner.
  */

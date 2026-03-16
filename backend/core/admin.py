@@ -11,6 +11,8 @@ class StudentAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets
     add_fieldsets = UserAdmin.add_fieldsets
 
+
+# Register other models with the admin site.
 admin.site.register(Module)
 admin.site.register(Exam)
 admin.site.register(Assignment)

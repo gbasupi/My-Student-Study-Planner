@@ -1,3 +1,4 @@
+// Dashboard.jsx - Main dashboard view showing stats, upcoming exams, pending assignments, and tasks
 import { useEffect, useMemo, useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -14,6 +15,7 @@ import TaskCard from "../components/dashcards/TaskCard";
 import "../styles/Layout.css";
 import "../styles/Dashboard.css";
 
+// Main component for the Dashboard view
 export default function Dashboard() {
   const [modules, setModules] = useState([]);
   const [exams, setExams] = useState([]);
@@ -23,17 +25,17 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [m, e, a, t] = await Promise.all([
+        const [modules, exams, assignments, tasks] = await Promise.all([
           getModules(),
           getExams(),
           getAssignments(),
           getTasks(),
         ]);
 
-        setModules(m || []);
-        setExams(e || []);
-        setAssignments(a || []);
-        setTasks(t || []);
+        setModules(modules || []);
+        setExams(exams || []);
+        setAssignments(assignments || []);
+        setTasks(tasks || []);
       } catch (err) {
         console.error("Dashboard load error:", err);
       }
@@ -42,25 +44,31 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  // Get the current date for filtering upcoming exams and pending assignments
   const now = new Date();
 
+  // Helper function to get module label for exams, assignments, and tasks
   const getModuleLabel = (item) =>
     item.module_code || item.module_name || "Unknown Module";
 
+  // Compute statistics for the dashboard using useMemo to optimize performance
   const stats = useMemo(() => {
     const upcomingExams = exams.filter(
       (e) => new Date(e.exam_date) >= now
     ).length;
 
+    // Count submitted assignments based on status being "S" (Submitted) or "G" (Graded)
     const submitted = assignments.filter(
       (a) => a.status === "S" || a.status === "G"
     ).length;
 
+    // Calculate assignment progress as a percentage of submitted assignments
     const progress =
       assignments.length > 0
         ? Math.round((submitted / assignments.length) * 100)
         : 0;
 
+    // Count completed tasks based on is_completed field being true or "true"
     const completedTasks = tasks.filter((t) => t.is_completed).length;
 
     return {

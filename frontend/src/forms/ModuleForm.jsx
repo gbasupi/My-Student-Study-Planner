@@ -1,3 +1,4 @@
+// ModuleForm.jsx - Form component for adding/editing modules in the study planner app
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -10,12 +11,14 @@ import {
   MenuItem,
 } from "@mui/material";
 
+// Initial empty form state for creating a new module
 const emptyForm = {
   module_code: "",
   title: "",
   semester: "",
 };
 
+// Main component for the Module form, used for both creating and editing modules
 export default function ModuleForm({
   open,
   onClose,
@@ -36,6 +39,7 @@ export default function ModuleForm({
     }
   }, [initialData, open]);
 
+  // Handle changes to form fields, updating the form state accordingly
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
@@ -43,6 +47,7 @@ export default function ModuleForm({
     }));
   };
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({

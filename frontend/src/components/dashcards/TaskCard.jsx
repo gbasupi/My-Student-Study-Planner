@@ -1,3 +1,8 @@
+/**
+ * TaskCard.jsx
+ * Card component for displaying study task information on the dashboard.
+ * Shows task module, title, and status.
+ */
 import { Paper, Typography } from "@mui/material";
 
 export default function TaskCard({ task }) {

@@ -1,3 +1,4 @@
+// AsignmentForm.jsx - Form component for adding/editing assignments in the study planner app
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
 } from "@mui/material";
 import { getModules } from "../api/api";
 
+// Initial empty form state for creating a new assignment
 const emptyForm = {
   module: "",
   title: "",
@@ -19,6 +21,7 @@ const emptyForm = {
   weight: "",
 };
 
+// Main component for the Assignment form, used for both creating and editing assignments
 export default function AssignmentForm({
   open,
   onClose,

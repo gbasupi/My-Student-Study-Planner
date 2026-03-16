@@ -1,3 +1,8 @@
+/**
+ * AssignmentCard.jsx
+ * Card component for displaying assignment information on the dashboard.
+ */
+
 import { Box, Paper, Typography } from "@mui/material";
 
 export default function AssignmentCard({ assignment }) {

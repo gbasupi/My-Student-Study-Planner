@@ -1,3 +1,8 @@
+/**
+ * ExamCard.jsx
+ * Card component for displaying exam information on the dashboard.
+ * Shows exam module, date, and countdown timer.
+ */
 import { Box, Paper, Typography } from "@mui/material";
 
 export default function ExamCard({ exam }) {

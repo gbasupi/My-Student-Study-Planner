@@ -1,3 +1,4 @@
+// Exams.jsx - Main view for managing exams, including CRUD operations and displaying in a table.
 import { useEffect, useState } from "react";
 import TableView from "../components/TableView";
 import ExamForm from "../forms/ExamForm";
@@ -8,6 +9,7 @@ import {
   deleteExam,
 } from "../api/api";
 
+// Main component for the Exams view
 export default function Exams() {
   const [exams, setExams] = useState([]);
   const [openForm, setOpenForm] = useState(false);
@@ -17,6 +19,7 @@ export default function Exams() {
     try {
       const data = await getExams();
 
+      // Data for display in the table
       const formatted = data.map((exam) => ({
         id: exam.id,
         module: exam.module_code,
@@ -44,6 +47,7 @@ export default function Exams() {
     fetchExams();
   }, []);
 
+  // Open the form for creating a new exam or editing an existing one.
   const handleOpenForm = (exam = null) => {
     if (exam) {
       setSelectedExam({
@@ -57,11 +61,13 @@ export default function Exams() {
     setOpenForm(true);
   };
 
+  // Close the form and reset selected exam
   const handleCloseForm = () => {
     setOpenForm(false);
     setSelectedExam(null);
   };
 
+  // Handle form submission for creating or updating an exam
   const handleSubmit = async (formData) => {
     try {
       if (selectedExam) {
@@ -77,6 +83,7 @@ export default function Exams() {
     }
   };
 
+  // Handle deleting an exam
   const handleDelete = async (row) => {
     try {
       await deleteExam(row.id);

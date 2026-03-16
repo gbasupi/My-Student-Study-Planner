@@ -1,10 +1,17 @@
+# -------------------------------------------------------------
+# Core serializers for the Student Study Planner application.
+# Converts complex data types like querysets and model instances into jsons and vice versa.
+# -------------------------------------------------------------
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Module, Exam, Assignment, StudyTask
 
-Student = get_user_model()
+Student = get_user_model()  # Get the custom user model, student in this case.
 
 
+# -------------------------
+# CURRENT USER SERIALIZER
+# -------------------------
 class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -67,17 +74,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = Student
         fields = ["first_name", "last_name", "email", "password", "password2"]
 
+    # Validate email to ensure it's unique and properly formatted.
     def validate_email(self, value):
         email = value.strip().lower()
         if Student.objects.filter(email=email).exists():
             raise serializers.ValidationError("An account with this email already exists.")
         return email
 
+    # Validate that the two password fields match.
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError({"password2": "Passwords do not match."})
         return attrs
 
+    # Create a new user with the validated data.
     def create(self, validated_data):
         email = validated_data["email"].strip().lower()
         password = validated_data.pop("password")

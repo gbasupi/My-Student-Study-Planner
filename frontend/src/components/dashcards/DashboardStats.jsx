@@ -1,3 +1,8 @@
+/**
+ * DashboardStats.jsx
+ * Component for displaying key statistics on the dashboard, such as total modules, upcoming exams, assignment progress, and study tasks completed.
+ * */
+
 import { Box, Paper, Typography } from "@mui/material";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";

@@ -1,3 +1,7 @@
+/**
+ * TableView.jsx
+ * Displays a table of data with actions for viewing, editing, and deleting rows
+ */
 import { useState } from "react";
 import {
   Box,

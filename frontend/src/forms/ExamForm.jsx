@@ -1,3 +1,4 @@
+// ExamForm.jsx - Form component for adding/editing exams in the study planner app
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
 } from "@mui/material";
 import { getModules } from "../api/api";
 
+// Initial empty form state for creating a new exam
 const emptyForm = {
   module: "",
   name: "",
@@ -19,11 +21,13 @@ const emptyForm = {
   notes: "",
 };
 
+// Main component for the Exam form, used for both creating and editing exams
 export default function ExamForm({ open, onClose, onSubmit, initialData }) {
   const [modules, setModules] = useState([]);
   const [formData, setFormData] = useState(emptyForm);
   const [dateError, setDateError] = useState("");
 
+  // Helper function to format date strings for the datetime-local input
   const formatDateTimeLocal = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -80,6 +84,7 @@ export default function ExamForm({ open, onClose, onSubmit, initialData }) {
     }
   };
 
+  // Handle form submission, validate exam date before submitting
   const handleSubmit = () => {
     if (!formData.exam_date) {
       setDateError("Please select an exam date.");

@@ -1,3 +1,4 @@
+// StudyTaskForm.jsx - Form component for adding/editing study tasks in the study planner app
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -13,6 +14,7 @@ import {
 } from "@mui/material";
 import { getModules } from "../api/api";
 
+// Initial empty form state for creating a new study task
 const emptyForm = {
   module: "",
   title: "",
@@ -20,7 +22,7 @@ const emptyForm = {
   duration_minutes: "",
   is_completed: false,
 };
-
+// Predefined study durations for quick selection in the form
 const durations = [
   { label: "15m", value: 15 },
   { label: "30m", value: 30 },
@@ -31,6 +33,7 @@ const durations = [
   { label: "3h", value: 180 },
 ];
 
+// Main component for the Study Task form, used for both creating and editing study tasks
 export default function StudyTaskForm({
   open,
   onClose,
@@ -78,6 +81,7 @@ export default function StudyTaskForm({
     }));
   };
 
+  // Handle form submission, validating required fields and converting values.
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.duration_minutes) {

@@ -1,3 +1,4 @@
+//StudyTasks.jsx - Main view for managing study tasks, including statistics and CRUD operations.
 import { useEffect, useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import TableView from "../components/TableView";
@@ -9,6 +10,7 @@ import {
   deleteTask,
 } from "../api/api";
 
+// Card component for displaying statistics
 function StatCard({ label, value, color }) {
   return (
     <Paper
@@ -31,6 +33,7 @@ function StatCard({ label, value, color }) {
   );
 }
 
+// Main component for the Study Tasks view
 export default function StudyTasks() {
   const [tasks, setTasks] = useState([]);
   const [rawTasks, setRawTasks] = useState([]);
@@ -45,7 +48,7 @@ export default function StudyTasks() {
       const formatted = data.map((task) => ({
         id: task.id,
 
-        // display values
+        // display values for table
         module: task.module_code,
         title: task.title,
         targetDate: new Date(task.target_date).toLocaleDateString("en-GB", {
@@ -56,7 +59,7 @@ export default function StudyTasks() {
         duration: `${task.duration_minutes} mins`,
         completed: task.is_completed ? "Yes" : "No",
 
-        // raw values for editing
+        // get raw values for edit form
         module_id: task.module,
         target_date: task.target_date,
         duration_minutes: task.duration_minutes,
@@ -87,6 +90,7 @@ export default function StudyTasks() {
 
   const toHours = (mins) => (mins / 60).toFixed(1) + "h";
 
+  // Open the form for creating a new task or editing.
   const handleOpenForm = (task = null) => {
     if (task) {
       setSelectedTask({
@@ -104,11 +108,13 @@ export default function StudyTasks() {
     setOpenForm(true);
   };
 
+  // Close the form and reset selected task
   const handleCloseForm = () => {
     setOpenForm(false);
     setSelectedTask(null);
   };
 
+  // Handle form submission for creating or updating a task
   const handleSubmit = async (formData) => {
     try {
       if (selectedTask) {
@@ -124,6 +130,7 @@ export default function StudyTasks() {
     }
   };
 
+  // Handle deleting a task
   const handleDelete = async (row) => {
     try {
       await deleteTask(row.id);

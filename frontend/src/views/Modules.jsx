@@ -1,3 +1,4 @@
+// Modules.jsx - Main view for managing modules, including CRUD operations and displaying in a table.
 import { useEffect, useState } from "react";
 import TableView from "../components/TableView";
 import ModuleForm from "../forms/ModuleForm";
@@ -8,6 +9,7 @@ import {
   deleteModule,
 } from "../api/api";
 
+// Main component for the Modules view
 export default function Modules() {
   const [modules, setModules] = useState([]);
   const [openForm, setOpenForm] = useState(false);
@@ -17,6 +19,7 @@ export default function Modules() {
     try {
       const data = await getModules();
 
+      // Format the data for display in the table
       const formatted = data.map((module) => ({
         id: module.id,
         module_code: module.module_code,
@@ -34,16 +37,19 @@ export default function Modules() {
     fetchModules();
   }, []);
 
+  // Open the form for creating a new module or editing.
   const handleOpenForm = (module = null) => {
     setSelectedModule(module);
     setOpenForm(true);
   };
 
+  // Close the form and reset selected module 
   const handleCloseForm = () => {
     setOpenForm(false);
     setSelectedModule(null);
   };
 
+  // Handle form submission for creating or updating a module
   const handleSubmit = async (formData) => {
     try {
       if (selectedModule) {
@@ -59,6 +65,7 @@ export default function Modules() {
     }
   };
 
+  // Handle deleting a module
   const handleDelete = async (row) => {
     await deleteModule(row.id);
     fetchModules();

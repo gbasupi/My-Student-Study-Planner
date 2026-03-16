@@ -1,3 +1,6 @@
+# --------------------------------------------------------------
+# core app model tests for the Student Study Planner application.
+# -------------------------------------------------------------
 from django.test import TestCase
 from django.utils import timezone
 from core.models import Student, Module, Exam, Assignment, StudyTask
@@ -13,8 +16,8 @@ class ModelTesting(TestCase):
 
         self.module = Module.objects.create(
             student=self.student,
-            module_code='CS101',
-            title='Introduction to Computer Science',
+            module_code='COMPSCI5089',
+            title='Introduction to Data Science and Systems',
             semester=1
         )
         
@@ -29,8 +32,8 @@ class ModelTesting(TestCase):
 
     def test_create_module_model(self):
         self.assertEqual(Module.objects.count(), 1)
-        self.assertEqual(self.module.module_code, 'CS101')
-        self.assertEqual(self.module.title, 'Introduction to Computer Science')
+        self.assertEqual(self.module.module_code, 'COMPSCI5089')
+        self.assertEqual(self.module.title, 'Introduction to Data Science and Systems')
         self.assertEqual(self.module.semester, 1)
 
     def test_module_linked_to_student(self):
@@ -40,42 +43,42 @@ class ModelTesting(TestCase):
     def test_module_string_representation(self):
         self.assertEqual(
         str(self.module),
-        "CS101 : Introduction to Computer Science"
+        "COMPSCI5089 : Introduction to Data Science and Systems"
     )
     
     def test_create_exam_model(self):
         exam = Exam.objects.create(
             module=self.module,
-            name='Midterm Exam',
+            name='Final Exam Intro to Data Science',
             exam_date=timezone.now(),
-            location='Hall A',
-            notes='Bring a calculator'
+            location='James Watt Building',
+            notes='Focus on chapters 1-5'
         )
 
         self.assertEqual(Exam.objects.count(), 1)
-        self.assertEqual(exam.name, 'Midterm Exam')
+        self.assertEqual(exam.name, 'Final Exam Intro to Data Science')
         self.assertEqual(exam.module, self.module) 
         
     def test_exam_string_representation(self):
         exam = Exam.objects.create(
         module=self.module,
-        name="Final Exam",
+        name="Final Exam Intro to Data Science",
         exam_date=timezone.now(),
-        location="Hall A"
+        location="James Watt Building"
     )
 
-        self.assertEqual(str(exam), "Final Exam - CS101")
+        self.assertEqual(str(exam), "Final Exam Intro to Data Science - COMPSCI5089")
             
     def test_create_assignment_model(self):
         assignment = Assignment.objects.create(
             module=self.module,
-            title='Python Project 1',
+            title='Assessment 1: Python Project',
             due_date=timezone.now() + timezone.timedelta(days=7),
             status=Assignment.STATUS_PENDING,
             weight=20
         )
         self.assertEqual(Assignment.objects.count(), 1)
-        self.assertEqual(assignment.title, 'Python Project 1')
+        self.assertEqual(assignment.title, 'Assessment 1: Python Project')
         self.assertEqual(assignment.weight, 20)
         self.assertEqual(assignment.module, self.module)
         
@@ -87,8 +90,8 @@ class ModelTesting(TestCase):
         weight=20
     )
 
-        self.assertEqual(str(assignment), "Coursework 1 (CS101)")
-    
+        self.assertEqual(str(assignment), "Coursework 1 (COMPSCI5089)")
+
             
     def test_create_studytask_model(self):
         task = StudyTask.objects.create(
@@ -129,6 +132,6 @@ class ModelTesting(TestCase):
         duration_minutes=45
     )
 
-        self.assertEqual(str(task), "Read Chapter 3 - CS101")
+        self.assertEqual(str(task), "Read Chapter 3 - COMPSCI5089")
 
         

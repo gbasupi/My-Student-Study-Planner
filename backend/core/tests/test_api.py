@@ -1,3 +1,6 @@
+# --------------------------------------------------------------
+# Core API tests for the Student Study Planner application.
+# -------------------------------------------------------------
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
@@ -20,18 +23,18 @@ class CoreAPITesting(APITestCase):
         
 
         self.module = Module.objects.create(
-            student=self.user, module_code='CS101', title='Intro to CS', semester=1
+            student=self.user, module_code='COMPSCI5089', title='Introduction to Data Science and Systems', semester=1
         )
         
 
         self.module_user2 = Module.objects.create(
-            student=self.user2, module_code='MATH101', title='Calculus', semester=1
+            student=self.user2, module_code='COMPSCI5100', title='Machine Learning & Artificial Intelligence for Data Scientists', semester=1
         )
 
     def test_create_module(self):
 
         url = reverse('modules-list')
-        data = {'module_code': 'CS102', 'title': 'Data Structures', 'semester': 2}
+        data = {'module_code': 'COMPSCI5089', 'title': 'Introduction to Data Science and Systems', 'semester': 2}
         response = self.client.post(url, data)
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -45,7 +48,7 @@ class CoreAPITesting(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['module_code'], 'CS101')
+        self.assertEqual(response.data[0]['module_code'], 'COMPSCI5089')
         
     
         
@@ -54,9 +57,9 @@ class CoreAPITesting(APITestCase):
         url = reverse('exams-list')
         data = {
             'module': self.module.id,
-            'name': 'Final Exam',
+            'name': 'Final Exam Intro to Data Science',
             'exam_date': timezone.now().isoformat(),
-            'location': 'Hall B'
+            'location': 'Boyd Orr Building',
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -64,9 +67,9 @@ class CoreAPITesting(APITestCase):
     def test_list_exams(self):
         Exam.objects.create(
         module=self.module,
-        name="Midterm",
+        name="Final Exam Intro to Data Science",
         exam_date=timezone.now(),
-        location="Room A"
+        location="Boyd Orr Building"
     )
 
         url = reverse('exams-list')
@@ -80,7 +83,7 @@ class CoreAPITesting(APITestCase):
         url = reverse('assignments-list')
         data = {
             'module': self.module.id,
-            'title': 'Homework 1',
+            'title': 'Assessment 1: Python Project',
             'due_date': timezone.now().isoformat(),
             'weight': 10
         }
@@ -90,7 +93,7 @@ class CoreAPITesting(APITestCase):
     def test_list_assignments(self):
         Assignment.objects.create(
         module=self.module,
-        title="Essay",
+        title="Coursework 1",
         due_date=timezone.now(),
         weight=20
     )

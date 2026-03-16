@@ -1,3 +1,6 @@
+# -------------------------------------------------------------
+# Core views for the Student Study Planner application.
+# -------------------------------------------------------------
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
@@ -13,13 +16,11 @@ from .serializers import (
     AssignmentSerializer,
     StudyTaskSerializer,
 )
-
-User = get_user_model()
-
-
+ 
+User = get_user_model() # Get the custom user model, student in this case.
     
 # -----------------------------
-# MODULE VIEWSET
+# MODULE VIEWSET 
 # -----------------------------
 class ModuleViewSet(viewsets.ModelViewSet):
     serializer_class = ModuleSerializer

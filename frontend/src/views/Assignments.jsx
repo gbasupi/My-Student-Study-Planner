@@ -1,3 +1,4 @@
+// Assignments.jsx - View for managing assignments, including listing, creating, editing, and deleting assignments.
 import { useEffect, useState } from "react";
 import TableView from "../components/TableView";
 import AssignmentForm from "../forms/AssignmentForm";
@@ -8,6 +9,7 @@ import {
   deleteAssignment,
 } from "../api/api";
 
+// Main component for the Assignments view
 export default function Assignments() {
   const [assignments, setAssignments] = useState([]);
   const [openForm, setOpenForm] = useState(false);
@@ -26,7 +28,7 @@ export default function Assignments() {
       const formatted = data.map((assignment) => ({
         id: assignment.id,
 
-        // values for table display
+        // display values 
         module: assignment.module_code,
         title: assignment.title,
         dueDate: new Date(assignment.due_date).toLocaleString("en-GB", {
@@ -39,7 +41,7 @@ export default function Assignments() {
         status: statusMap[assignment.status] || assignment.status,
         weight: `${assignment.weight}%`,
 
-        // raw values for edit form
+        // get raw values for editing
         module_id: assignment.module,
         due_date: assignment.due_date,
         status_code: assignment.status,
@@ -56,6 +58,7 @@ export default function Assignments() {
     fetchAssignments();
   }, []);
 
+  // Open the form for creating a new assignment or editing an existing one.
   const handleOpenForm = (assignment = null) => {
     if (assignment) {
       setSelectedAssignment({
@@ -73,11 +76,13 @@ export default function Assignments() {
     setOpenForm(true);
   };
 
+  // Close the form and reset selected assignment
   const handleCloseForm = () => {
     setOpenForm(false);
     setSelectedAssignment(null);
   };
 
+  // Handle form submission for creating or updating an assignment
   const handleSubmit = async (formData) => {
     try {
       if (selectedAssignment) {
@@ -93,6 +98,7 @@ export default function Assignments() {
     }
   };
 
+  // Handle deleting an assignment
   const handleDelete = async (row) => {
     try {
       await deleteAssignment(row.id);
